@@ -503,7 +503,7 @@ type SystemModel struct {
 每个模型必须：
 
 - 实现 `TableName()`。
-- 表名和字段名与现有 `gva` 数据库一致。
+- 表名和字段名与现有 `go_app_starter` 数据库一致。
 - 通过 GORM DryRun 验证 INSERT、UPDATE 和 DELETE SQL。
 - 不得因为其他项目存在审计字段就嵌入 `ControlBy`。
 
@@ -599,7 +599,7 @@ go build ./...
 - JWT/Casbin 测试：未登录、黑名单、无权限和有权限。
 - 前端冒烟测试：页面加载、查询、创建、更新和删除。
 
-开发库 `gva` 只用于只读核对；破坏性测试只能使用独立 `gva_test`。
+开发库 `go_app_starter` 只用于只读核对；破坏性测试只能使用独立 `go_app_starter_test`。
 
 ## 十三、提交前检查
 

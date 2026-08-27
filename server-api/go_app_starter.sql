@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.43, for macos15.4 (arm64)
 --
--- Host: 127.0.0.1    Database: gva
+-- Host: 127.0.0.1    Database: go_app_starter
 -- ------------------------------------------------------
 -- Server version	8.0.43
 
@@ -16,12 +16,12 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Current Database: `gva`
+-- Current Database: `go_app_starter`
 --
 
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `gva` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `go_app_starter` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 
-USE `gva`;
+USE `go_app_starter`;
 
 --
 -- Table structure for table `agent_profiles`
@@ -1255,11 +1255,11 @@ INSERT INTO `user_info` VALUES (3,'api_user_1782534330676432000','$2a$10$X6ppFg7
 UNLOCK TABLES;
 
 --
--- Dumping events for database 'gva'
+-- Dumping events for database 'go_app_starter'
 --
 
 --
--- Dumping routines for database 'gva'
+-- Dumping routines for database 'go_app_starter'
 --
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

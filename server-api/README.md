@@ -66,10 +66,10 @@ go run cmd/admin-api/main.go -env=dev    # admin_api
 
 ```shell
 # 创建数据库
-mysql -uroot -p123456 -e "create database if not exists gva default charset utf8mb4 collate utf8mb4_unicode_ci;"
+mysql -uroot -p123456 -e "create database if not exists go_app_starter default charset utf8mb4 collate utf8mb4_unicode_ci;"
 
 # 导入初始化 SQL
-mysql -uroot -p123456 gva < docs/sql/schema.sql
+mysql -uroot -p123456 go_app_starter < go_app_starter.sql
 ```
 
 ### 正式环境布署

@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.43, for macos15.4 (arm64)
 --
--- Host: 127.0.0.1    Database: gva
+-- Host: 127.0.0.1    Database: go_app_starter
 -- ------------------------------------------------------
 -- Server version	8.0.43
 

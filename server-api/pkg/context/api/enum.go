@@ -1,0 +1,7 @@
+package api
+
+const (
+	STATUS_SUCCESS      = 200
+	STATUS_PARAM_ERROR  = 4000
+	STATUS_SERVER_ERROR = 5000
+)

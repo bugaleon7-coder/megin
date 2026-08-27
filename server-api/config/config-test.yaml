@@ -1,0 +1,75 @@
+app:
+  name: xserver
+  env: test
+  debug: true
+  version: 1.0.0
+  file_url: ""
+  mode: mixed
+
+servers:
+  mixed:
+    port: 8800
+  api:
+    port: 8801
+  admin_api:
+    port: 8802
+
+redis:
+  addr: 127.0.0.1:6379
+  password: ''
+  prefix: ''
+database:
+  driver: mysql
+  dsn: root:123456@tcp(127.0.0.1)/gva?charset=utf8&parseTime=True&loc=Local
+  max_idle_conns: 10
+  max_open_conns: 50
+jwt:
+  secret: 1234435435345345345
+  expire_seconds: 86400
+totp:
+  enable: false
+  issuer: xadmin
+
+# 自动化测试默认关闭图形验证码，避免测试依赖随机验证码内容。
+captcha:
+  enable: false
+
+system:
+  use-strict-auth: false
+
+# 测试环境的初始规则保持极高额度，避免限流影响其他接口测试；限流行为由中间件单元测试单独验证。
+# ip、uid 参数只在规则表为空时生成初始规则；规则表已有数据后，以数据库配置为准。
+api-rate-limit:
+  # 总开关；测试环境仍开启，以验证路由能够正常挂载限流中间件。
+  enable: true
+  ip:
+    # 每个 IP 的测试额度。
+    rate: 10000
+    burst: 10000
+  uid:
+    # 首次生成全局 UID 规则时是否启用，以及对应的测试初始额度。
+    enable: true
+    rate: 10000
+    burst: 10000
+  # 测试进程中的令牌桶空闲 600 秒后可以删除。
+  idle-expiration-seconds: 600
+  # 每隔至少 300 秒由请求触发一次清理。
+  cleanup-interval-seconds: 300
+  # 测试环境同样使用 60 秒刷新周期。
+  refresh-interval-seconds: 60
+
+pprof:
+  enable: false
+  port: 6060
+
+api-doc:
+  enable: true
+  output-swagger-file: static/swagger/api/swagger.json
+  api-output-swagger-file: static/swagger/api/swagger.json
+  admin-output-swagger-file: static/swagger/admin-api/swagger.json
+  system-output-swagger-file: static/swagger/system/swagger.json
+  gen-scan-dir:
+    - "pkg/context/api"
+    - "internal/api"
+    - "internal/system"
+    - "internal/admin-api"

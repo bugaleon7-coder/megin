@@ -1,0 +1,35 @@
+# macOS
+.DS_Store
+**/.DS_Store
+
+# IDE
+**/.idea/
+**/.vscode/
+
+# Node 依赖和前端构建产物
+**/node_modules/
+**/dist/
+**/.vite/
+**/.vite-temp/
+
+# Go 编译缓存、测试产物和本地二进制
+**/.cache/
+**/.gocache/
+*.test
+*.out
+coverage.*
+*.coverprofile
+server-api/main
+server-api/server
+server-api/xserver
+server-api/app
+
+# 运行时数据
+**/logs/
+**/uploads/
+*.log
+
+# 本地配置和环境文件
+**/.env.local
+**/.env.*.local
+server-api/config-local.yaml

@@ -1,0 +1,51 @@
+app:
+  name: xserver
+  env: dev
+  debug: true
+  version: 1.0.0
+  file_url: ""
+  mode: mixed
+
+servers:
+  mixed:
+    port: 8800
+  api:
+    port: 8801
+  admin_api:
+    port: 8802
+
+redis:
+  addr: 127.0.0.1:6379
+  password: ''
+  prefix: ''
+database:
+  driver: mysql
+  dsn: root:123456@tcp(127.0.0.1)/xserver?charset=utf8&parseTime=True&loc=Local
+  max_idle_conns: 10
+  max_open_conns: 50
+jwt:
+  secret: 1234435435345345345
+  expire_seconds: 86400
+totp:
+  enable: false
+  issuer: xadmin
+
+system:
+  use-strict-auth: false
+
+# 运行时性能分析，仅监听本机，禁止配置为公网地址。
+pprof:
+  enable: true
+  port: 6060
+
+api-doc:
+  enable: true
+  output-swagger-file: static/swagger/api/swagger.json
+  api-output-swagger-file: static/swagger/api/swagger.json
+  admin-output-swagger-file: static/swagger/admin-api/swagger.json
+  system-output-swagger-file: static/swagger/system/swagger.json
+  gen-scan-dir:
+    - "pkg/context/api"
+    - "internal/api"
+    - "internal/system"
+    - "internal/admin-api"

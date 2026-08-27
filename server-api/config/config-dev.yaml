@@ -1,0 +1,81 @@
+app:
+  name: xserver
+  env: dev
+  debug: true
+  version: 1.0.0
+  file_url: ""
+  mode: mixed
+
+servers:
+  mixed:
+    port: 8800
+  api:
+    port: 8801
+  admin_api:
+    port: 8802
+
+redis:
+  addr: 127.0.0.1:6379
+  password: ""
+
+database:
+  driver: mysql
+  dsn: root:123456@tcp(127.0.0.1)/gva?charset=utf8&parseTime=True&loc=Local
+
+jwt:
+  secret: 1234435435345345345
+  expire_seconds: 86400
+
+totp:
+  enable: false
+  issuer: xadmin
+
+# 后台登录图形验证码开关。开发调试时关闭，登录接口无需提交 captcha 和 captchaId。
+captcha:
+  enable: false
+
+system:
+  use-strict-auth: false
+
+# 前台 API 进程内令牌桶限流；每个服务实例独立计数，多实例之间不共享额度。
+# ip、uid 中的 rate 和 burst 只在规则表为空时用于生成全局初始规则；建表后请通过 MySQL 规则管理。
+# rate：每秒补充的令牌数；支持小数，例如 0.2 表示每 5 秒补充 1 个令牌。
+# burst：令牌桶容量，必须是正整数，决定空闲后能够积攒的最大令牌数和瞬时放行上限。
+api-rate-limit:
+  # 总开关；关闭后 IP 和 UID 两级限流都不执行。
+  enable: true
+  ip:
+    # 每个 IP 平均每秒补充 2 个令牌，空闲后最多积攒并瞬时放行 2 个请求。
+    rate: 2
+    burst: 2
+  uid:
+    # 首次生成全局 UID 规则时是否启用；规则表已有数据后，以数据库中的规则状态为准。
+    enable: true
+    # 每个 UID 每 5 秒补充 1 个令牌，桶容量为 1，因此不能积攒突发额度。
+    rate: 0.2
+    burst: 1
+  # IP 或 UID 连续空闲 600 秒后，其令牌桶可以从内存中删除。
+  idle-expiration-seconds: 600
+  # 每隔至少 300 秒，由后续请求触发一次闲置令牌桶清理。
+  cleanup-interval-seconds: 300
+  # 每 60 秒从 MySQL 重新加载一次启用规则，作为后台即时刷新的兜底。
+  refresh-interval-seconds: 60
+
+# 运行时性能分析，仅监听本机，禁止配置为公网地址。
+pprof:
+  enable: true
+  port: 6060
+
+api-doc:
+  enable: true
+  output-swagger-file: static/swagger/api/swagger.json
+  api-output-swagger-file: static/swagger/api/swagger.json
+  admin-output-swagger-file: static/swagger/admin-api/swagger.json
+  system-output-swagger-file: static/swagger/system/swagger.json
+  # 如果文档中没有描述，那可能就是这里没有引入扫描包了
+  gen-scan-dir:
+    - pkg/context/api
+    - internal/api
+    - internal/system
+    - internal/admin-api
+    - internal/module

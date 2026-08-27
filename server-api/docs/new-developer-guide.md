@@ -283,18 +283,16 @@ JWT 解析/黑名单 -> Casbin 鉴权 -> 业务 Handler
 - 更新接口：先确认资源是否存在，再做状态校验和更新
 - 删除接口：先确认是否允许删除，再执行删除
 
-### 6.4 能写测试就不要裸提代码
+### 6.4 测试用例编写规范
 
-优先补这几类测试：
+测试用例以清晰、易读为第一原则，统一遵守以下规范：
 
-- service 业务测试
-- router/contract 契约测试
-- 关键 handler 的请求测试
-
-可以先参考：
-
-- [internal/system/router/contract_test.go](/Users/lchb/go_admin/gin-vue-admin/shop-api/internal/system/router/contract_test.go)
-- [internal/system/service](/Users/lchb/go_admin/gin-vue-admin/shop-api/internal/system/service) 下的测试文件
+- 遵守单一职责原则：一个测试用例只测试一个接口或一个明确行为。注册、登录、查询应分别编写；例如使用 `TestApiUserRegister`、`TestApiUserLogin`，禁止使用 `TestApiUserRegisterAndLogin` 这类组合名称。
+- 测试文件统一放在项目根目录的 `test/` 下，按模块建立子目录；禁止将测试文件写在 `internal/`、`pkg/` 等业务代码目录中。
+- 测试账号和密码统一定义为文件顶部的 `username`、`password` 常量，后续用例和辅助函数直接复用。
+- 请求参数必须使用接口定义的 request DTO，例如 `authDto.RegisterReq`、`authDto.LoginReq`、`commonDto.EmptyReq`，禁止手写匿名 `map`。
+- 需要登录态时统一通过 `GetToken()` 获取 token；`GetToken()` 只负责登录和提取 token，不得注册用户或执行其他业务。
+- 接口测试只使用 `test.Print(resp.Body.String())` 输出被测接口的原始返回结果，由开发者自行确认，不在同一用例中堆叠断言或跨接口校验。
 
 ## 7. system 模块开发要特别注意什么
 

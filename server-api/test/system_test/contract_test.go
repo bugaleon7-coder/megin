@@ -1,4 +1,4 @@
-package router
+package system_test
 
 import (
 	"reflect"
@@ -6,6 +6,7 @@ import (
 
 	sysApi "megin/internal/admin-api/system"
 	commonDto "megin/internal/module/common/dto"
+	sysRouter "megin/internal/system/router"
 	"megin/pkg/context/router"
 
 	"github.com/gin-gonic/gin"
@@ -142,30 +143,30 @@ func collectSystemRoutes() []router.RouteInfo {
 	adminPublicGroup := registry.Group("admin-api")
 
 	// Authenticated system routes
-	SysUserRouter(adminProtectedGroup)
-	SysAuthorityRouter(adminProtectedGroup)
-	SysMenuRouter(adminProtectedGroup)
-	SysApiRouter(adminProtectedGroup)
-	SysCasbinRouter(adminProtectedGroup)
-	SysJwtRouter(adminProtectedGroup)
-	SysParamsRouter(adminProtectedGroup)
-	SysApiTokenRouter(adminProtectedGroup)
-	SysVersionRouter(adminProtectedGroup)
-	SysOperationRecordRouter(adminProtectedGroup)
-	SysLoginLogRouter(adminProtectedGroup)
-	SysErrorRouter(adminProtectedGroup)
-	SysDictionaryRouter(adminProtectedGroup)
-	SysDictionaryDetailRouter(adminProtectedGroup)
-	SysSystemRouter(adminProtectedGroup)
-	SysAuthorityBtnRouter(adminProtectedGroup)
-	RateLimitRouter(adminProtectedGroup)
+	sysRouter.SysUserRouter(adminProtectedGroup)
+	sysRouter.SysAuthorityRouter(adminProtectedGroup)
+	sysRouter.SysMenuRouter(adminProtectedGroup)
+	sysRouter.SysApiRouter(adminProtectedGroup)
+	sysRouter.SysCasbinRouter(adminProtectedGroup)
+	sysRouter.SysJwtRouter(adminProtectedGroup)
+	sysRouter.SysParamsRouter(adminProtectedGroup)
+	sysRouter.SysApiTokenRouter(adminProtectedGroup)
+	sysRouter.SysVersionRouter(adminProtectedGroup)
+	sysRouter.SysOperationRecordRouter(adminProtectedGroup)
+	sysRouter.SysLoginLogRouter(adminProtectedGroup)
+	sysRouter.SysErrorRouter(adminProtectedGroup)
+	sysRouter.SysDictionaryRouter(adminProtectedGroup)
+	sysRouter.SysDictionaryDetailRouter(adminProtectedGroup)
+	sysRouter.SysSystemRouter(adminProtectedGroup)
+	sysRouter.SysAuthorityBtnRouter(adminProtectedGroup)
+	sysRouter.RateLimitRouter(adminProtectedGroup)
 
 	// Public routes (login, captcha)
 	handler := &sysApi.SysUser{}
 	router.POST(adminPublicGroup, "/user/login", handler.Login)
 	router.POST(adminPublicGroup, "/user/captcha", handler.Captcha)
 	router.GET(adminPublicGroup, "/user/loginConfig", handler.LoginConfig)
-	SysErrorPublicRouter(adminPublicGroup)
+	sysRouter.SysErrorPublicRouter(adminPublicGroup)
 
 	return registry.Routes()
 }

@@ -37,6 +37,17 @@
 - [internal/api/article.go](/Users/lchb/go_admin/gin-vue-admin/shop-api/internal/api/article.go) 里的缓存写法属于演示，不代表普通接口默认必须加缓存
 - 如果涉及数据库连接信息，优先查看 [config/config-dev.yaml](/Users/lchb/go_admin/gin-vue-admin/shop-api/config/config-dev.yaml)
 
+### 5. 测试用例规范
+
+编写或修改测试用例前，先阅读 [docs/new-developer-guide.md 中的“测试用例编写规范”](docs/new-developer-guide.md#64-测试用例编写规范)，并以该文档为完整规范。
+
+- 遵守单一职责原则：一个测试用例只测试一个接口或一个明确行为，禁止组合命名或串联多个业务接口。
+- 测试文件统一放在项目根目录的 `test/` 下并按模块分目录，禁止写在业务代码所在目录。
+- 测试账号和密码统一使用文件顶部的 `username`、`password` 常量。
+- 请求参数必须使用接口定义的 request DTO，禁止手写匿名 `map`。
+- 登录态统一通过只负责登录和提取 token 的 `GetToken()` 获取。
+- 测试只输出被测接口的原始返回结果，由开发者自行确认。
+
 ## 先看哪份文档
 
 ### 1. 第一次接手项目

@@ -45,8 +45,8 @@ func uintPtr(value uint) *uint { return &value }
 func TestCreateAuthorityUsesLeastPrivilegeDefaultsAndHardDelete(t *testing.T) {
 	ctx, db := newSystemTestContext(t)
 	service := NewSysAuthority(ctx)
-	config.GetConfig().System.UseStrictAuth = false
-	t.Cleanup(func() { config.GetConfig().System.UseStrictAuth = false })
+	config.GetConfig().Admin.UseStrictAuth = false
+	t.Cleanup(func() { config.GetConfig().Admin.UseStrictAuth = false })
 
 	if err := db.Create(&model.SysBaseMenu{SystemModel: modelSystemModel(1), Name: "dashboard"}).Error; err != nil {
 		t.Fatalf("create default menu: %v", err)
@@ -114,9 +114,9 @@ func TestAuthorityTreeHonorsStrictAuthConfiguration(t *testing.T) {
 	if err := db.Create(&authorities).Error; err != nil {
 		t.Fatalf("create authorities: %v", err)
 	}
-	t.Cleanup(func() { config.GetConfig().System.UseStrictAuth = false })
+	t.Cleanup(func() { config.GetConfig().Admin.UseStrictAuth = false })
 
-	config.GetConfig().System.UseStrictAuth = false
+	config.GetConfig().Admin.UseStrictAuth = false
 	list, err := service.GetAuthorityInfoList(888)
 	if err != nil {
 		t.Fatalf("non-strict list: %v", err)
@@ -125,7 +125,7 @@ func TestAuthorityTreeHonorsStrictAuthConfiguration(t *testing.T) {
 		t.Fatalf("unexpected non-strict tree: %#v", list)
 	}
 
-	config.GetConfig().System.UseStrictAuth = true
+	config.GetConfig().Admin.UseStrictAuth = true
 	list, err = service.GetAuthorityInfoList(100)
 	if err != nil {
 		t.Fatalf("strict list: %v", err)
@@ -233,8 +233,8 @@ func TestJwtBlacklistQueryTreatsMissingRecordAsNotBlacklisted(t *testing.T) {
 func TestSetRoleUsersKeepsPrimaryRoleValidAndRollsBack(t *testing.T) {
 	ctx, db := newSystemTestContext(t)
 	service := NewSysAuthority(ctx)
-	config.GetConfig().System.UseStrictAuth = false
-	t.Cleanup(func() { config.GetConfig().System.UseStrictAuth = false })
+	config.GetConfig().Admin.UseStrictAuth = false
+	t.Cleanup(func() { config.GetConfig().Admin.UseStrictAuth = false })
 	if err := db.Create(&[]model.SysAuthority{
 		{AuthorityId: 100, AuthorityName: "primary", ParentId: uintPtr(0)},
 		{AuthorityId: 200, AuthorityName: "fallback", ParentId: uintPtr(0)},

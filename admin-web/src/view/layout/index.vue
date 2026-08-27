@@ -3,12 +3,12 @@
     class="bg-gray-50 text-slate-700 dark:text-slate-500 dark:bg-slate-800 w-screen h-screen"
   >
     <el-watermark
-      v-if="config.show_watermark"
+      v-if="watermark"
       :font="font"
       :z-index="9999"
       :gap="[180, 150]"
       class="!absolute !inset-0 !pointer-events-none"
-      :content="userStore.userInfo.nickName"
+      :content="watermark"
     />
     <gva-header />
     <div class="flex flex-row w-full gva-container pt-16 box-border !h-full">
@@ -67,7 +67,7 @@
   import { storeToRefs } from 'pinia'
   import '@/style/transition.scss'
   const appStore = useAppStore()
-  const { config, isDark, device } = storeToRefs(appStore)
+  const { config, isDark, device, watermark } = storeToRefs(appStore)
 
   defineOptions({
     name: 'GvaLayout'

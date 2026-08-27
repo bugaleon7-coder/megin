@@ -2,8 +2,8 @@ package internal
 
 import (
 	"megin/internal/config"
-	rateLimitRuntime "megin/internal/module/rate_limit/runtime"
-	rateLimitService "megin/internal/module/rate_limit/service"
+	rateLimitRuntime "megin/internal/system/runtime"
+	rateLimitService "megin/internal/system/service"
 	"megin/pkg/logger"
 	"time"
 )

@@ -94,8 +94,11 @@ sh server.sh run --env=dev
 
 混合模式默认看下面两个文档入口：
 
+- 后台管理页面：`http://localhost:8800/admin/`
 - 前台接口文档：`http://localhost:8800/api-doc/`
 - 后台接口文档：`http://localhost:8800/admin-api-doc/`
+
+后台页面由 `static/admin` 托管。在 `admin-web` 目录执行 `npm run build` 会直接更新该目录。
 
 如果文档打不开，优先检查：
 

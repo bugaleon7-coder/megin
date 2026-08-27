@@ -4,7 +4,7 @@ import (
 	"math"
 	"megin/internal/config"
 	commonDto "megin/internal/module/common/dto"
-	rateLimitRuntime "megin/internal/module/rate_limit/runtime"
+	rateLimitRuntime "megin/internal/system/runtime"
 	"megin/pkg/context/api"
 	"megin/pkg/errs"
 	"net/http"

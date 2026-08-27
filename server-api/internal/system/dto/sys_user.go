@@ -6,7 +6,8 @@ import (
 
 // SysUserResponse 用户信息响应
 type SysUserResponse struct {
-	UserInfo *SysUser `json:"userInfo"`
+	UserInfo  *SysUser `json:"userInfo"`
+	Watermark string   `json:"watermark"`
 }
 
 // LoginResponse 登录响应

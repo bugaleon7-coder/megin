@@ -36,16 +36,6 @@ func AdminApiRouter(adminApiGroup *router.RouteGroup) *router.RouteGroup {
 	router.GET(adminApiGroup, "/customer/customer", customer.Detail)
 	router.GET(adminApiGroup, "/customer/customerList", customer.List)
 
-	// 前台 API 限流规则管理。
-	rateLimit := &handler.RateLimitRule{}
-	router.POST(adminApiGroup, "/rate-limit/create", rateLimit.Create)
-	router.PUT(adminApiGroup, "/rate-limit/update", rateLimit.Update)
-	router.PUT(adminApiGroup, "/rate-limit/changeStatus", rateLimit.ChangeStatus)
-	router.DELETE(adminApiGroup, "/rate-limit/delete", rateLimit.Delete)
-	router.GET(adminApiGroup, "/rate-limit/detail", rateLimit.Detail)
-	router.GET(adminApiGroup, "/rate-limit/pageList", rateLimit.PageList)
-	router.POST(adminApiGroup, "/rate-limit/refresh", rateLimit.Refresh)
-
 	return adminApiGroup
 }
 
@@ -67,6 +57,7 @@ func InitSystemAdminRouter(adminApiGroup *router.RouteGroup) *router.RouteGroup 
 	sysRouter.SysJwtRouter(adminApiGroup)
 	sysRouter.SysAuthorityBtnRouter(adminApiGroup)
 	sysRouter.SysErrorRouter(adminApiGroup)
+	sysRouter.RateLimitRouter(adminApiGroup)
 	return adminApiGroup
 }
 

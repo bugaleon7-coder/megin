@@ -168,9 +168,9 @@ func (this *SysUser) Login(ctx *api.Context, req *systemDto.LoginReq) (*api.Resu
 // @Description 获取登录页所需的最小公开配置
 func (this *SysUser) LoginConfig(ctx *api.Context, req *dtoBaseReq) (*api.Result[systemDto.LoginConfigResponse], error) {
 	return api.ResultData(systemDto.LoginConfigResponse{
-		CaptchaEnabled: config.GetConfig().Captcha.Enable,
-		TOTPEnabled:    config.GetConfig().TOTP.Enable,
-		TOTPIssuer:     config.GetConfig().TOTP.Issuer,
+		CaptchaEnabled: config.GetConfig().Admin.Captcha.Enable,
+		TOTPEnabled:    config.GetConfig().Admin.TOTP.Enable,
+		TOTPIssuer:     config.GetConfig().Admin.TOTP.Issuer,
 	})
 }
 
@@ -218,7 +218,7 @@ func (this *SysUser) DisableTOTP(ctx *api.Context, req *systemDto.TotpCodeReq) (
 // @Description 获取登录验证码
 func (this *SysUser) Captcha(ctx *api.Context, req *dtoBaseReq) (*api.Result[systemDto.CaptchaResponse], error) {
 	// 验证码关闭时直接告诉前端无需展示输入框，同时避免生成无用图片和内存验证码记录。
-	if !config.GetConfig().Captcha.Enable {
+	if !config.GetConfig().Admin.Captcha.Enable {
 		return api.ResultData(systemDto.CaptchaResponse{OpenCaptcha: false})
 	}
 

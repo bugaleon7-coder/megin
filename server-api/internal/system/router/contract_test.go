@@ -100,6 +100,15 @@ var contractRoutes = []expectedRoute{
 	{method: "POST", path: "/admin-api/sysApiToken/getApiTokenList"},
 	{method: "POST", path: "/admin-api/sysApiToken/deleteApiToken"},
 
+	// ── API 限流规则 ──
+	{method: "POST", path: "/admin-api/system/rate-limit/create"},
+	{method: "PUT", path: "/admin-api/system/rate-limit/update"},
+	{method: "PUT", path: "/admin-api/system/rate-limit/changeStatus"},
+	{method: "DELETE", path: "/admin-api/system/rate-limit/delete"},
+	{method: "GET", path: "/admin-api/system/rate-limit/detail"},
+	{method: "GET", path: "/admin-api/system/rate-limit/pageList"},
+	{method: "POST", path: "/admin-api/system/rate-limit/refresh"},
+
 	// ── 版本管理 ──
 	{method: "DELETE", path: "/admin-api/sysVersion/deleteSysVersion"},
 	{method: "DELETE", path: "/admin-api/sysVersion/deleteSysVersionByIds"},
@@ -149,6 +158,7 @@ func collectSystemRoutes() []router.RouteInfo {
 	SysDictionaryDetailRouter(adminProtectedGroup)
 	SysSystemRouter(adminProtectedGroup)
 	SysAuthorityBtnRouter(adminProtectedGroup)
+	RateLimitRouter(adminProtectedGroup)
 
 	// Public routes (login, captcha)
 	handler := &sysApi.SysUser{}

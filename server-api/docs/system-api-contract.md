@@ -201,7 +201,19 @@ Casbin 内部维护接口不对前端公开，除非在契约中新增并完成�
 | POST | `/admin-api/sysApiToken/getApiTokenList` | JSON | PageResult |
 | POST | `/admin-api/sysApiToken/deleteApiToken` | JSON | 空 |
 
-## 十二、版本管理
+## 十二、API 限流规则
+
+| 方法 | 路径 | 参数位置 | `data` |
+|---|---|---|---|
+| POST | `/admin-api/system/rate-limit/create` | JSON | 限流规则详情 |
+| PUT | `/admin-api/system/rate-limit/update` | JSON | 限流规则详情 |
+| PUT | `/admin-api/system/rate-limit/changeStatus` | JSON | 空 |
+| DELETE | `/admin-api/system/rate-limit/delete` | Query：`id` | 空 |
+| GET | `/admin-api/system/rate-limit/detail` | Query：`id` | 限流规则详情 |
+| GET | `/admin-api/system/rate-limit/pageList` | Query | 限流规则分页结果 |
+| POST | `/admin-api/system/rate-limit/refresh` | 空 JSON | `{ rule_count }` |
+
+## 十三、版本管理
 
 | 方法 | 路径 | 参数位置 | `data` |
 |---|---|---|---|
@@ -213,7 +225,7 @@ Casbin 内部维护接口不对前端公开，除非在契约中新增并完成�
 | GET | `/admin-api/sysVersion/downloadVersionJson` | Query | JSON 文件流 |
 | POST | `/admin-api/sysVersion/importVersion` | JSON | 空 |
 
-## 十三、错误日志
+## 十四、错误日志
 
 | 方法 | 路径 | 参数位置 | `data` |
 |---|---|---|---|
@@ -227,13 +239,13 @@ Casbin 内部维护接口不对前端公开，除非在契约中新增并完成�
 
 前端生成文件中的 `getSysErrorPublic` 当前没有合法原版后端契约，不应据此新增接口。
 
-## 十四、JWT
+## 十五、JWT
 
 | 方法 | 路径 | 参数位置 | `data` |
 |---|---|---|---|
 | POST | `/admin-api/jwt/jsonInBlacklist` | 从请求头读取当前 Token | 空 |
 
-## 十五、契约测试要求
+## 十六、契约测试要求
 
 契约测试至少覆盖：
 

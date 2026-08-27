@@ -365,7 +365,7 @@ Map 的创建、读取和清理需要并发保护。单个 `rate.Limiter` 本身
 
 ```text
 后台 Handler
-  → rate-limit biz
+  → system rate-limit biz
   → 数据库事务提交
   → LimiterManager.Reload()
   → 原子替换当前实例的规则快照
@@ -399,19 +399,19 @@ Map 的创建、读取和清理需要并发保护。单个 `rate.Limiter` 本身
 
 ## 十、后台管理设计
 
-限流规则属于普通后台配置型模块，不属于 system 兼容模块。实现时参考 `article` 模块，不以 `internal/system` 为新模块模板。
+限流规则属于后台系统基础能力，管理端实现统一收口到 `internal/system`；前台请求链路仍由 `/api` 限流中间件执行。
 
 已实现接口：
 
 | 方法 | 路径 | 用途 |
 |---|---|---|
-| GET | `/admin-api/rate-limit/pageList` | 分页查询规则 |
-| GET | `/admin-api/rate-limit/detail` | 查询规则详情 |
-| POST | `/admin-api/rate-limit/create` | 新增规则 |
-| PUT | `/admin-api/rate-limit/update` | 修改规则 |
-| PUT | `/admin-api/rate-limit/changeStatus` | 启用或禁用规则 |
-| DELETE | `/admin-api/rate-limit/delete` | 删除规则 |
-| POST | `/admin-api/rate-limit/refresh` | 手动刷新当前实例规则 |
+| GET | `/admin-api/system/rate-limit/pageList` | 分页查询规则 |
+| GET | `/admin-api/system/rate-limit/detail` | 查询规则详情 |
+| POST | `/admin-api/system/rate-limit/create` | 新增规则 |
+| PUT | `/admin-api/system/rate-limit/update` | 修改规则 |
+| PUT | `/admin-api/system/rate-limit/changeStatus` | 启用或禁用规则 |
+| DELETE | `/admin-api/system/rate-limit/delete` | 删除规则 |
+| POST | `/admin-api/system/rate-limit/refresh` | 手动刷新当前实例规则 |
 
 这些接口挂载后台 Token 和 Casbin，并遵守后台成功响应 `code=200`、消息字段使用 `message` 的约定。接口元数据和超级管理员初始权限见 `docs/sql/api_rate_limit.sql`。
 
@@ -419,26 +419,25 @@ Map 的创建、读取和清理需要并发保护。单个 `rate.Limiter` 本身
 
 ```text
 internal/
-├── admin-api/
+├── admin-api/system/
 │   └── rate_limit.go
 ├── middleware/
 │   └── api_rate_limit.go
-└── module/
-    └── rate_limit/
-        ├── biz/
-        │   └── rate_limit.go
-        ├── dto/
-        │   └── rate_limit.go
-        ├── model/
-        │   └── rate_limit.go
-        ├── repository/
-        │   └── rate_limit.go
-        ├── runtime/
-        │   ├── bucket.go
-        │   ├── manager.go
-        │   └── snapshot.go
-        └── service/
-            └── rate_limit.go
+└── system/
+    ├── biz/
+    │   └── rate_limit.go
+    ├── dto/
+    │   └── rate_limit.go
+    ├── model/
+    │   └── rate_limit.go
+    ├── repository/
+    │   └── rate_limit.go
+    ├── router/
+    │   └── rate_limit.go
+    ├── runtime/
+    │   └── rate_limit.go
+    └── service/
+        └── rate_limit.go
 ```
 
 `biz` 负责“数据库修改成功后刷新运行时规则”的完整流程；`service` 和 `repository` 不依赖 Gin。

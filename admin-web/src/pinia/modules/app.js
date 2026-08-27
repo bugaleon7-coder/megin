@@ -7,6 +7,7 @@ export const useAppStore = defineStore('app', () => {
   const device = ref('')
   const drawerSize = ref('')
   const operateMinWith = ref('240')
+  const watermark = ref('')
   const config = reactive({
     weakness: false,
     grey: false,
@@ -16,8 +17,6 @@ export const useAppStore = defineStore('app', () => {
     layout_side_width: 256,
     layout_side_collapsed_width: 80,
     layout_side_item_height: 48,
-    //todo::水印
-    show_watermark: false,
     side_mode: 'normal',
     // 页面过渡动画配置
     transition_type: 'slide',
@@ -89,8 +88,8 @@ export const useAppStore = defineStore('app', () => {
     config.layout_side_item_height = e
   }
 
-  const toggleConfigWatermark = (e) => {
-    config.show_watermark = e
+  const setWatermark = (value) => {
+    watermark.value = typeof value === 'string' ? value : ''
   }
 
   const toggleSideMode = (e) => {
@@ -114,7 +113,6 @@ export const useAppStore = defineStore('app', () => {
     layout_side_width: 256,
     layout_side_collapsed_width: 80,
     layout_side_item_height: 48,
-    show_watermark: true,
     side_mode: 'normal',
     // 页面过渡动画配置
     transition_type: 'slide',
@@ -143,6 +141,7 @@ export const useAppStore = defineStore('app', () => {
     device,
     drawerSize,
     operateMinWith,
+    watermark,
     config,
     toggleTheme,
     toggleDevice,
@@ -154,7 +153,7 @@ export const useAppStore = defineStore('app', () => {
     toggleConfigSideWidth,
     toggleConfigSideCollapsedWidth,
     toggleConfigSideItemHeight,
-    toggleConfigWatermark,
+    setWatermark,
     toggleSideMode,
     toggleTransition,
     resetConfig,

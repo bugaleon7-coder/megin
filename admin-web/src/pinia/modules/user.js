@@ -57,6 +57,7 @@ export const useUserStore = defineStore('user', () => {
     const res = await getUserInfo()
     if (res.code === 0) {
       setUserInfo(res.data.userInfo)
+      appStore.setWatermark(res.data.watermark)
     }
     return res
   }

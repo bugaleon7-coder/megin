@@ -6,6 +6,8 @@ import (
 	"megin/internal/middleware"
 	"megin/pkg/context/router"
 	"megin/pkg/openapi"
+	"net/http"
+	"path/filepath"
 	"strings"
 
 	"github.com/gin-contrib/gzip"
@@ -39,6 +41,7 @@ func InitGinRouter(modules RouterModules) *gin.Engine {
 
 	staticRouter(registry)
 	conf := config.GetConfig()
+	log.Printf("后台管理地址: http://localhost:%s/admin/", conf.Port)
 
 	if conf.ApiDoc.Enable {
 		// 生成前后台拆分后的 OpenAPI 文档
@@ -167,6 +170,40 @@ func staticRouter(routeRegistry *router.RouteRegistry) {
 	routeRegistry.Engine.Static("api-doc", "./static/knife/")
 	routeRegistry.Engine.Static("admin-api-doc", "./static/knife/")
 	routeRegistry.Engine.Static("admin-system-doc", "./static/knife/")
+	registerAdminStatic(routeRegistry.Engine, "./static/admin")
+}
+
+// registerAdminStatic 托管编译后的后台管理页面，并为前端路由提供 index.html 回退。
+func registerAdminStatic(engine *gin.Engine, dir string) {
+	adminFS := http.Dir(dir)
+	fileServer := http.StripPrefix("/admin", http.FileServer(adminFS))
+
+	engine.GET("/admin", func(ctx *gin.Context) {
+		ctx.Redirect(http.StatusMovedPermanently, "/admin/")
+	})
+	engine.GET("/admin/*filepath", func(ctx *gin.Context) {
+		requested := strings.TrimPrefix(ctx.Param("filepath"), "/")
+		if requested != "" {
+			file, err := adminFS.Open(requested)
+			if err == nil {
+				info, statErr := file.Stat()
+				_ = file.Close()
+				if statErr == nil && !info.IsDir() {
+					fileServer.ServeHTTP(ctx.Writer, ctx.Request)
+					return
+				}
+			}
+		}
+
+		indexPath := filepath.Join(dir, "index.html")
+		indexFile, err := adminFS.Open("index.html")
+		if err != nil {
+			ctx.Status(http.StatusNotFound)
+			return
+		}
+		_ = indexFile.Close()
+		ctx.File(indexPath)
+	})
 }
 
 func staticSwaggerRouter(routeRegistry *router.RouteRegistry) {

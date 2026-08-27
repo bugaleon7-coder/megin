@@ -30,16 +30,21 @@ VALUES
 ('健康检查接口IP限流示例',2,'GET','/api/health',1,1,5,1,1,'默认接口级限流示例：每个IP每5秒允许1个请求',0,0,NOW(3),NOW(3));
 
 -- 注册后台接口元数据。按照项目的 Casbin 兼容规则，路径不保存 /admin-api 前缀。
+UPDATE `sys_apis`
+SET `path` = CONCAT('/system', `path`), `updated_at` = NOW(3)
+WHERE `path` LIKE '/rate-limit/%'
+  AND `deleted_at` IS NULL;
+
 INSERT INTO `sys_apis` (`created_at`,`updated_at`,`path`,`description`,`api_group`,`method`)
 SELECT NOW(3),NOW(3),source.path,source.description,'API限流规则',source.method
 FROM (
-  SELECT '/rate-limit/create' AS path,'新增API限流规则' AS description,'POST' AS method
-  UNION ALL SELECT '/rate-limit/update','修改API限流规则','PUT'
-  UNION ALL SELECT '/rate-limit/changeStatus','启停API限流规则','PUT'
-  UNION ALL SELECT '/rate-limit/delete','删除API限流规则','DELETE'
-  UNION ALL SELECT '/rate-limit/detail','查询API限流规则详情','GET'
-  UNION ALL SELECT '/rate-limit/pageList','分页查询API限流规则','GET'
-  UNION ALL SELECT '/rate-limit/refresh','手动刷新API限流规则','POST'
+  SELECT '/system/rate-limit/create' AS path,'新增API限流规则' AS description,'POST' AS method
+  UNION ALL SELECT '/system/rate-limit/update','修改API限流规则','PUT'
+  UNION ALL SELECT '/system/rate-limit/changeStatus','启停API限流规则','PUT'
+  UNION ALL SELECT '/system/rate-limit/delete','删除API限流规则','DELETE'
+  UNION ALL SELECT '/system/rate-limit/detail','查询API限流规则详情','GET'
+  UNION ALL SELECT '/system/rate-limit/pageList','分页查询API限流规则','GET'
+  UNION ALL SELECT '/system/rate-limit/refresh','手动刷新API限流规则','POST'
 ) AS source
 WHERE NOT EXISTS (
   SELECT 1 FROM `sys_apis`
@@ -49,16 +54,21 @@ WHERE NOT EXISTS (
 );
 
 -- 为默认超级管理员角色 888 授权；其他角色仍需通过后台权限管理按需分配。
+UPDATE `casbin_rule`
+SET `v1` = CONCAT('/system', `v1`)
+WHERE `ptype` = 'p'
+  AND `v1` LIKE '/rate-limit/%';
+
 INSERT INTO `casbin_rule` (`ptype`,`v0`,`v1`,`v2`,`v3`,`v4`,`v5`)
 SELECT 'p','888',source.path,source.method,'','',''
 FROM (
-  SELECT '/rate-limit/create' AS path,'POST' AS method
-  UNION ALL SELECT '/rate-limit/update','PUT'
-  UNION ALL SELECT '/rate-limit/changeStatus','PUT'
-  UNION ALL SELECT '/rate-limit/delete','DELETE'
-  UNION ALL SELECT '/rate-limit/detail','GET'
-  UNION ALL SELECT '/rate-limit/pageList','GET'
-  UNION ALL SELECT '/rate-limit/refresh','POST'
+  SELECT '/system/rate-limit/create' AS path,'POST' AS method
+  UNION ALL SELECT '/system/rate-limit/update','PUT'
+  UNION ALL SELECT '/system/rate-limit/changeStatus','PUT'
+  UNION ALL SELECT '/system/rate-limit/delete','DELETE'
+  UNION ALL SELECT '/system/rate-limit/detail','GET'
+  UNION ALL SELECT '/system/rate-limit/pageList','GET'
+  UNION ALL SELECT '/system/rate-limit/refresh','POST'
 ) AS source
 WHERE NOT EXISTS (
   SELECT 1 FROM `casbin_rule`

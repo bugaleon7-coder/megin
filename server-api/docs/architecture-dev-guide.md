@@ -109,10 +109,12 @@ internal/
 ├── middleware/                JWT、Casbin、日志等中间件
 ├── router/                    顶层路由编排
 └── system/
+    ├── biz/                   system 内部复杂流程编排，例如限流规则保存后刷新运行时快照
     ├── dto/                   system 请求和响应 DTO，字段遵循 Vue 接口契约
     ├── model/                 GORM 模型
     ├── repository/            数据访问
     ├── router/                system 路由注册
+    ├── runtime/               system 运行时基础能力，例如内存限流规则与令牌桶
     └── service/               业务逻辑
 
 pkg/

@@ -18,6 +18,9 @@ npm run serve
 npm run build
 ```
 
+生产构建会直接输出到 `../server-api/static/admin`。启动 Go 服务后通过
+`http://host:port/admin/` 访问后台管理页面，接口仍使用同源的 `/admin-api`。
+
 ### Run your tests
 
 ```

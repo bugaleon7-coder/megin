@@ -60,8 +60,12 @@ type CaptchaConfig struct {
 	Enable bool `yaml:"enable"` // 是否启用后台登录图形验证码；关闭后验证码接口不生成图片，登录接口也不校验验证码
 }
 
-type SystemConfig struct {
-	UseStrictAuth bool `yaml:"use-strict-auth"`
+// AdminConfig 是仅作用于管理后台的安全与界面配置。
+type AdminConfig struct {
+	TOTP          TOTPConfig    `yaml:"totp"`
+	Captcha       CaptchaConfig `yaml:"captcha"`
+	UseStrictAuth bool          `yaml:"use-strict-auth"`
+	Watermark     bool          `yaml:"watermark"`
 }
 
 // RateLimitRule 是单个维度的令牌桶配置。
@@ -125,9 +129,7 @@ type ServiceConfig struct {
 	Database     Database           `yaml:"database"`
 	Jwt          JwtConfig          `yaml:"jwt"`
 	Redis        Redis              `yaml:"redis"`
-	TOTP         TOTPConfig         `yaml:"totp"`
-	Captcha      CaptchaConfig      `yaml:"captcha"`
-	System       SystemConfig       `yaml:"system"`
+	Admin        AdminConfig        `yaml:"admin"`
 	APIRateLimit APIRateLimitConfig `yaml:"api-rate-limit"`
 	ApiDoc       ApiDoc             `yaml:"api-doc"`
 	Pprof        PprofConfig        `yaml:"pprof"`
@@ -271,6 +273,8 @@ func (config *ServiceConfig) normalize(mode string) {
 
 func (config *ServiceConfig) applyAPIRateLimitDefaults() {
 	// 配置缺失或值不合法时使用保守默认值，避免创建无法正常工作的令牌桶。
+	config.APIRateLimit.Enable = true
+	config.APIRateLimit.UID.Enable = true
 	if config.APIRateLimit.IP.Rate <= 0 {
 		config.APIRateLimit.IP.Rate = 20
 	}

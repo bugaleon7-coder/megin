@@ -2,7 +2,7 @@ package schedule
 
 import (
 	"megin/internal/config"
-	rateLimitRuntime "megin/internal/module/rate_limit/runtime"
+	rateLimitRuntime "megin/internal/system/runtime"
 	"megin/pkg/logger"
 	"runtime"
 	"runtime/debug"

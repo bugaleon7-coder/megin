@@ -1,0 +1,4 @@
+/*! 
+ Build based on gin-vue-admin 
+ Time : 1787804889000 */
+System.register(["./087AC4D233B64EB0index-legacy.DiStYFC3.js"],function(t,r){"use strict";var i;return{setters:[function(t){i=t.v}],execute:function(){t("c",function(t){return i({url:"/sysDictionary/createSysDictionary",method:"post",data:t})}),t("d",function(t){return i({url:"/sysDictionary/deleteSysDictionary",method:"delete",data:t})}),t("u",function(t){return i({url:"/sysDictionary/updateSysDictionary",method:"put",data:t})}),t("f",function(t){return i({url:"/sysDictionary/findSysDictionary",method:"get",params:t})}),t("g",function(t){return i({url:"/sysDictionary/getSysDictionaryList",method:"get",params:t})}),t("e",function(t){return i({url:"/sysDictionary/exportSysDictionary",method:"get",params:t})}),t("i",function(t){return i({url:"/sysDictionary/importSysDictionary",method:"post",data:t})})}}});

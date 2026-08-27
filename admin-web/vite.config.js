@@ -36,9 +36,9 @@ export default ({ mode }) => {
     }
   }
 
-  const base = '/'
+  const base = '/admin/'
   const root = './'
-  const outDir = 'dist'
+  const outDir = path.resolve(__dirname, '../server-api/static/admin')
 
   const config = {
     base: base, // 编译后js导入的资源路径
@@ -80,6 +80,7 @@ export default ({ mode }) => {
       manifest: false, // 是否产出manifest.json
       sourcemap: false, // 是否产出sourcemap.json
       outDir: outDir, // 产出目录
+      emptyOutDir: true, // 输出目录位于前端项目外部，构建前仍需清理旧资源
       terserOptions: {
         compress: {
           //生产环境时移除console

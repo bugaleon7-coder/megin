@@ -131,11 +131,11 @@ func (s *SysUser) Login(req *systemDto.LoginReq) (*systemDto.SysUser, string, in
 
 	// 图形验证码关闭时不读取也不校验请求中的验证码字段，便于本地开发调试。
 	// 生产环境应通过 captcha.enable=true 开启校验，不能只依赖前端隐藏或展示验证码。
-	if config.GetConfig().Captcha.Enable && !captcha.Verify(req.CaptchaId, req.Captcha) {
+	if config.GetConfig().Admin.Captcha.Enable && !captcha.Verify(req.CaptchaId, req.Captcha) {
 		return nil, "", 0, s.ErrorMessage("验证码错误")
 	}
 
-	if config.GetConfig().TOTP.Enable && user.TOTPEnabled {
+	if config.GetConfig().Admin.TOTP.Enable && user.TOTPEnabled {
 		secret, err := decryptTOTPSecret(user.TOTPSecret)
 		if err != nil {
 			return nil, "", 0, s.Error(err, "读取Google TOTP配置失败")
@@ -181,7 +181,7 @@ func (s *SysUser) GetTOTPStatus(userID uint) (*systemDto.TotpStatusResponse, err
 		return nil, s.ErrorMessage("用户不存在")
 	}
 	conf := config.GetConfig()
-	issuer := strings.TrimSpace(conf.TOTP.Issuer)
+	issuer := strings.TrimSpace(conf.Admin.TOTP.Issuer)
 	if issuer == "" {
 		issuer = "xadmin"
 	}
@@ -190,13 +190,13 @@ func (s *SysUser) GetTOTPStatus(userID uint) (*systemDto.TotpStatusResponse, err
 		BoundAt:       user.TOTPBoundAt,
 		Issuer:        issuer,
 		Account:       user.Username,
-		NeedSetup:     conf.TOTP.Enable && !user.TOTPEnabled,
-		SystemEnabled: conf.TOTP.Enable,
+		NeedSetup:     conf.Admin.TOTP.Enable && !user.TOTPEnabled,
+		SystemEnabled: conf.Admin.TOTP.Enable,
 	}, nil
 }
 
 func (s *SysUser) InitTOTP(userID uint) (*systemDto.TotpSetupResponse, error) {
-	if !config.GetConfig().TOTP.Enable {
+	if !config.GetConfig().Admin.TOTP.Enable {
 		return nil, s.ErrorMessage("系统未开启Google TOTP")
 	}
 	user, err := s.Repo.GetById(userID)
@@ -222,7 +222,7 @@ func (s *SysUser) InitTOTP(userID uint) (*systemDto.TotpSetupResponse, error) {
 		return nil, s.Error(err, "初始化Google TOTP失败")
 	}
 
-	issuer := strings.TrimSpace(config.GetConfig().TOTP.Issuer)
+	issuer := strings.TrimSpace(config.GetConfig().Admin.TOTP.Issuer)
 	if issuer == "" {
 		issuer = "xadmin"
 	}
@@ -235,7 +235,7 @@ func (s *SysUser) InitTOTP(userID uint) (*systemDto.TotpSetupResponse, error) {
 }
 
 func (s *SysUser) EnableTOTP(userID uint, req *systemDto.TotpCodeReq) error {
-	if !config.GetConfig().TOTP.Enable {
+	if !config.GetConfig().Admin.TOTP.Enable {
 		return s.ErrorMessage("系统未开启Google TOTP")
 	}
 	user, err := s.Repo.GetById(userID)
@@ -540,7 +540,18 @@ func (s *SysUser) GetUserInfo(id uint) (*systemDto.SysUserResponse, error) {
 	if user.ID == 0 {
 		return nil, s.ErrorMessage("用户不存在")
 	}
-	return &systemDto.SysUserResponse{UserInfo: s.toDTOPtr(user)}, nil
+	watermark := ""
+	if config.GetConfig().Admin.Watermark {
+		// 登录账号是可唯一定位操作人的标识；同时展示昵称，方便截图流转时人工识别。
+		watermark = user.Username
+		if nickname := strings.TrimSpace(user.NickName); nickname != "" {
+			watermark = nickname + "（" + user.Username + "）"
+		}
+	}
+	return &systemDto.SysUserResponse{
+		UserInfo:  s.toDTOPtr(user),
+		Watermark: watermark,
+	}, nil
 }
 
 func (s *SysUser) FindUserById(id uint) (*systemDto.SysUser, error) {

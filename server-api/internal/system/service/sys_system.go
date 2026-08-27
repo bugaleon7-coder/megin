@@ -145,10 +145,6 @@ func defaultSystemConfigView() map[string]any {
 			"addr":     conf.Redis.Addr,
 			"password": conf.Redis.Password,
 		},
-		"totp": map[string]any{
-			"enable": conf.TOTP.Enable,
-			"issuer": conf.TOTP.Issuer,
-		},
 		"system": map[string]any{
 			"addr":                 port,
 			"db-type":              conf.Database.Driver,
@@ -156,7 +152,8 @@ func defaultSystemConfigView() map[string]any {
 			"use-multipoint":       false,
 			"use-redis":            conf.Redis.Addr != "",
 			"use-mongo":            false,
-			"use-strict-auth":      conf.System.UseStrictAuth,
+			"use-strict-auth":      conf.Admin.UseStrictAuth,
+			"watermark":            conf.Admin.Watermark,
 			"iplimit-count":        0,
 			"iplimit-time":         0,
 			"disable-auto-migrate": false,
@@ -249,17 +246,16 @@ func applyRuntimeConfigView(view map[string]any) {
 		jwt["issuer"] = "xadmin"
 	}
 	if system, ok := view["system"].(map[string]any); ok {
-		system["use-strict-auth"] = config.GetConfig().System.UseStrictAuth
+		system["use-strict-auth"] = config.GetConfig().Admin.UseStrictAuth
 	}
 }
 
 func normalizeSystemConfig(raw map[string]any) {
 	// 保证核心分支存在，避免写入后被前端二次读取时出现空对象访问错误。
-	ensureMap(raw, "system")
+	ensureMap(raw, "admin")
 	ensureMap(raw, "jwt")
 	ensureMap(raw, "redis")
 	ensureMap(raw, "database")
-	ensureMap(raw, "totp")
 	ensureMap(raw, "api-doc")
 	ensureMap(raw, "app")
 	ensureMap(raw, "servers")
@@ -302,6 +298,10 @@ func syncFrontConfigToLegacy(raw map[string]any) {
 	}
 
 	if system, ok := getNestedMap(raw, "system"); ok {
+		admin := ensureMap(raw, "admin")
+		if strictAuth, ok := system["use-strict-auth"].(bool); ok {
+			admin["use-strict-auth"] = strictAuth
+		}
 		if addr := asInt(system["addr"]); addr > 0 {
 			raw["port"] = strconv.Itoa(addr)
 			if servers, ok := getNestedMap(raw, "servers", activeMode); ok {
@@ -313,6 +313,7 @@ func syncFrontConfigToLegacy(raw map[string]any) {
 				database["driver"] = dbType
 			}
 		}
+		delete(raw, "system")
 	}
 
 	if jwt, ok := getNestedMap(raw, "jwt"); ok {
@@ -377,16 +378,12 @@ func applyInMemoryConfig(raw map[string]any) {
 		applyServerNode(&conf.Servers.AdminAPI, v)
 	}
 
-	if v, ok := getNestedMap(raw, "system"); ok {
-		if addr := asInt(v["addr"]); addr > 0 {
-			conf.Port = strconv.Itoa(addr)
-			conf.ActiveServer().Port = conf.Port
-		}
-		if dbType, ok := v["db-type"].(string); ok && dbType != "" {
-			conf.Database.Driver = dbType
-		}
+	if v, ok := getNestedMap(raw, "admin"); ok {
 		if strictAuth, ok := v["use-strict-auth"].(bool); ok {
-			conf.System.UseStrictAuth = strictAuth
+			conf.Admin.UseStrictAuth = strictAuth
+		}
+		if watermark, ok := v["watermark"].(bool); ok {
+			conf.Admin.Watermark = watermark
 		}
 	}
 
@@ -412,12 +409,12 @@ func applyInMemoryConfig(raw map[string]any) {
 		}
 	}
 
-	if v, ok := getNestedMap(raw, "totp"); ok {
+	if v, ok := getNestedMap(raw, "admin", "totp"); ok {
 		if enable, ok := v["enable"].(bool); ok {
-			conf.TOTP.Enable = enable
+			conf.Admin.TOTP.Enable = enable
 		}
 		if issuer, ok := v["issuer"].(string); ok {
-			conf.TOTP.Issuer = issuer
+			conf.Admin.TOTP.Issuer = issuer
 		}
 	}
 

@@ -57,7 +57,7 @@ func (s *SysAuthority) getDefaultMenuIds() []uint {
 }
 
 func (s *SysAuthority) CreateAuthority(adminAuthorityID uint, req *systemDto.CreateAuthorityReq) (*model.SysAuthority, error) {
-	if config.GetConfig().System.UseStrictAuth && (req.ParentId == nil || *req.ParentId == 0) {
+	if config.GetConfig().Admin.UseStrictAuth && (req.ParentId == nil || *req.ParentId == 0) {
 		req.ParentId = &adminAuthorityID
 	}
 	if req.ParentId != nil && *req.ParentId != 0 && *req.ParentId != adminAuthorityID {
@@ -312,7 +312,7 @@ func (s *SysAuthority) GetAuthorityInfoList(adminAuthorityId uint) ([]systemDto.
 	db := s.Repo.DB().Model(&model.SysAuthority{}).Preload("DataAuthorityId")
 
 	// Apply the original configurable strict-auth behavior.
-	if !config.GetConfig().System.UseStrictAuth {
+	if !config.GetConfig().Admin.UseStrictAuth {
 		db = db.Where("parent_id = ?", 0)
 	} else if adminAuth.ParentId != nil && *adminAuth.ParentId == 0 {
 		// Top-level: can only see self
@@ -565,7 +565,7 @@ func (s *SysAuthority) GetStructAuthorityList(authorityID uint) ([]uint, error) 
 }
 
 func (s *SysAuthority) CheckAuthorityIDAuth(adminAuthorityID, targetID uint) error {
-	if !config.GetConfig().System.UseStrictAuth {
+	if !config.GetConfig().Admin.UseStrictAuth {
 		return nil
 	}
 	ids, err := s.GetStructAuthorityList(adminAuthorityID)

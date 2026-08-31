@@ -35,33 +35,16 @@
     {
       typeTitle: '通知',
       time: '今天',
-      title: '购买商业授权后可进入专属技术支持通道，加快问题排查和版本升级效率。',
       dotClass: 'bg-cyan-500',
       tagClass: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-200'
     },
     {
       typeTitle: '活动',
       time: '2天前',
-      title: '插件市场正在进行限时优惠活动，授权用户可获得更低的插件采购成本。',
       dotClass: 'bg-emerald-500',
       tagClass: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-200'
-    },
-    {
-      typeTitle: '合规',
-      time: '3天前',
-      title: '未授权商用存在合规风险，建议团队尽快完成授权以保障项目持续交付。',
-      dotClass: 'bg-amber-500',
-      tagClass: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-200'
-    },
-    {
-      typeTitle: '服务',
-      time: '5天前',
-      title: '授权用户可获得官方长期维护承诺，包含安全修复与关键版本升级支持。',
-      dotClass: 'bg-violet-500',
-      tagClass: 'bg-violet-100 text-violet-700 dark:bg-violet-900/40 dark:text-violet-200'
     }
   ]
 </script>
 
 <style scoped lang="scss"></style>
-

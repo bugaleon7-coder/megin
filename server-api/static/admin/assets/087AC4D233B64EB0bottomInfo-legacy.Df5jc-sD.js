@@ -1,4 +1,0 @@
-/*! 
- Build based on gin-vue-admin 
- Time : 1787804889000 */
-System.register(["./087AC4D233B64EB0index-legacy.DiStYFC3.js"],function(t,e){"use strict";var s,n,a,r;return{setters:[function(t){s=t.o,n=t.c,a=t.a,r=t.L}],execute:function(){var e={class:"flex flex-col md:flex-row gap-2 items-center text-sm text-slate-700 dark:text-slate-500 justify-center py-2"};t("_",Object.assign({name:"BottomInfo"},{__name:"bottomInfo",setup:function(t){return function(t,c){return s(),n("div",e,[c[0]||(c[0]=a("div",{class:"text-center"},[a("span",{class:"mr-1"},"Powered by"),a("span",null,[a("a",{class:"font-bold text-active",href:"https://github.com/flipped-aurora/gin-vue-admin"},"Gin-Vue-Admin")])],-1)),r(t.$slots,"default"),c[1]||(c[1]=a("div",{class:"text-center"},[a("span",{class:"mr-1"},"Copyright"),a("span",null,[a("a",{class:"font-bold text-active",href:"https://github.com/flipped-aurora"},"flipped-aurora团队")])],-1))])}}}))}}});

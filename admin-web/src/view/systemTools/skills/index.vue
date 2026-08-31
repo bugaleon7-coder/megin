@@ -1,9 +1,5 @@
 ﻿<template>
   <div class="h-full">
-    <warning-bar
-        href="https://plugin.gin-vue-admin.com/license"
-        title="此功能仅在开发阶段使用，用户构建本项目内的skills技能库。"
-    />
     <el-row :gutter="12" class="h-full">
       <el-col :xs="24" :sm="8" :md="6" :lg="5" class="flex flex-col gap-4 h-full">
         <el-card shadow="never" class="!border-none shrink-0">
@@ -477,11 +473,7 @@
         </el-table-column>
         <el-table-column label="名称" prop="name" min-width="160" show-overflow-tooltip>
           <template #default="{ row }">
-            <a
-              class="text-blue-500 hover:text-blue-700 cursor-pointer"
-              :href="`https://plugin.gin-vue-admin.com/details/${row.ID}`"
-              target="_blank"
-            >{{ row.name }}</a>
+            <span>{{ row.name }}</span>
           </template>
         </el-table-column>
         <el-table-column label="简介" prop="resume" min-width="240" show-overflow-tooltip />
@@ -497,12 +489,7 @@
               :loading="downloadingIds.has(row.ID)"
               @click="handleDownloadSkill(row)"
             >下载</el-button>
-            <a
-              v-else
-              class="text-blue-500 hover:text-blue-700 text-sm"
-              :href="`https://plugin.gin-vue-admin.com/details/${row.ID}`"
-              target="_blank"
-            >去购买</a>
+            <span v-else class="text-sm text-gray-500">暂不可下载</span>
           </template>
         </el-table-column>
       </el-table>
@@ -1308,21 +1295,14 @@
     return options
   })
 
-  const pluginMarketLoginURL = 'https://plugin.gin-vue-admin.com'
-
   const isPluginMarketAuthError = (message) => {
     const msg = (message || '').toString()
-    return msg.includes('插件市场登录') || msg.includes('401')
+    return msg.includes('401')
   }
 
   const promptPluginMarketLogin = async () => {
     try {
-      await ElMessageBox.confirm('请先登录插件市场后再下载技能，是否现在前往登录？', '提示', {
-        confirmButtonText: '前往插件市场',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-      window.open(pluginMarketLoginURL, '_blank')
+      await ElMessageBox.alert('当前账号无权下载该技能。', '提示', { type: 'warning' })
     } catch (e) {
       // 用户取消时不需要额外提示
     }
@@ -1457,4 +1437,3 @@
     }
   }
 </script>
-

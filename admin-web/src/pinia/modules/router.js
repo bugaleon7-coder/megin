@@ -11,6 +11,25 @@ const notLayoutRouterArr = []
 const keepAliveRoutersArr = []
 const nameMap = {}
 
+const isLegacyOfficialMenu = (menu) =>
+  menu?.name === 'about' || /^(https?:)?\/\//.test(menu?.path || '')
+
+const removeLegacyOfficialMenus = (menus) =>
+  menus
+    .filter((menu) => !isLegacyOfficialMenu(menu))
+    .map((menu) => {
+      const normalizedMenu =
+        menu.name === 'superAdmin'
+          ? { ...menu, meta: { ...menu.meta, title: '系统管理' } }
+          : menu
+      return {
+        ...normalizedMenu,
+        children: normalizedMenu.children
+          ? removeLegacyOfficialMenus(normalizedMenu.children)
+          : normalizedMenu.children
+      }
+    })
+
 const formatRouter = (routes, routeMap, parent) => {
   routes &&
     routes.forEach((item) => {
@@ -178,13 +197,14 @@ export const useRouterStore = defineStore('router', () => {
       return false
     }
 
-    const asyncRouter = asyncRouterRes.data?.menus
-    if (!Array.isArray(asyncRouter)) {
+    const menus = asyncRouterRes.data?.menus
+    if (!Array.isArray(menus)) {
       console.error('[API Error] /menu/getMenu', 'menus 数据格式异常', asyncRouterRes)
       asyncRouters.value = baseRouter
       return false
     }
 
+    const asyncRouter = removeLegacyOfficialMenus(menus)
     asyncRouter.push({
         path: 'reload',
         name: 'Reload',

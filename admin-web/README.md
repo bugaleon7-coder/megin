@@ -1,4 +1,4 @@
-# gin-vue-admin web
+# MeAdmin Web
 
 ## Project setup
 
@@ -48,9 +48,9 @@ web
  │   ├── App.vue                -- 主页面
  │   ├── assets                 -- 静态资源
  │   ├── components             -- 全局组件
- │   ├── core                   -- gva 组件包
- │   │   ├── config.js          -- gva网站配置文件
- │   │   ├── gin-vue-admin.js   -- 注册欢迎文件
+ │   ├── core                   -- 核心组件包
+ │   │   ├── config.js          -- 网站配置文件
+ │   │   ├── meadmin.js         -- 注册欢迎文件
  │   │   └── global.js          -- 统一导入文件
  │   ├── directive              -- v-auth 注册文件
  │   ├── main.js                -- 主文件
@@ -83,7 +83,6 @@ web
  │   │   ├── request.js         -- 请求
  │   │   └── stringFun.js       -- 字符串文件
  |   ├── view -- 主要view代码
- |   |   ├── about -- 关于我们
  |   |   ├── dashboard -- 面板
  |   |   ├── error -- 错误
  |   |   ├── example --上传案例

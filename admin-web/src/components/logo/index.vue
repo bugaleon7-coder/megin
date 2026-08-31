@@ -77,6 +77,6 @@ function getSize() {
     :style="{
       ...getSize()
     }">
-    GVA
+    ME
   </div>
 </template>

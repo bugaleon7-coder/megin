@@ -21,7 +21,7 @@
   const Commits =(page) => {
    return service({
     url:
-      'https://api.github.com/repos/flipped-aurora/gin-vue-admin/commits?page=' +
+      '/api/commits?page=' +
       page,
     method: 'get'
   })

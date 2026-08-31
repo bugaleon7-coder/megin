@@ -190,6 +190,7 @@ func registerAdminStatic(engine *gin.Engine, dir string) {
 				info, statErr := file.Stat()
 				_ = file.Close()
 				if statErr == nil && !info.IsDir() {
+					setAdminCacheControl(ctx, requested)
 					fileServer.ServeHTTP(ctx.Writer, ctx.Request)
 					return
 				}
@@ -203,8 +204,20 @@ func registerAdminStatic(engine *gin.Engine, dir string) {
 			return
 		}
 		_ = indexFile.Close()
+		ctx.Header("Cache-Control", "no-cache, no-store, must-revalidate")
 		ctx.File(indexPath)
 	})
+}
+
+// setAdminCacheControl 为后台入口与构建资源设置不同的缓存策略，发布后可自动加载新版本。
+func setAdminCacheControl(ctx *gin.Context, requested string) {
+	if requested == "index.html" {
+		ctx.Header("Cache-Control", "no-cache, no-store, must-revalidate")
+		return
+	}
+	if strings.HasPrefix(requested, "assets/") {
+		ctx.Header("Cache-Control", "public, max-age=31536000, immutable")
+	}
 }
 
 func staticSwaggerRouter(routeRegistry *router.RouteRegistry) {

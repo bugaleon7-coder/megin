@@ -203,9 +203,9 @@ func (this *Repository[T]) PageQuery(query *gorm.DB, page commonDto.PageQuery) (
 	return pageQuery[T](query, page)
 }
 
-// PageQueryDTO 执行分页查询，并将每一行扫描到指定的 DTO。
+// PageQueryAs 执行分页查询，并将每一行扫描到指定的 DTO。
 // query 必须指定模型（例如 db.Model(&Article{})），且查询字段名或别名应与 DTO 字段对应。
-func PageQueryDTO[DTO any](query *gorm.DB, page commonDto.PageQuery) (*commonDto.PageResult[DTO], error) {
+func (this *Repository[T]) PageQueryAs[DTO any](query *gorm.DB, page commonDto.PageQuery) (*commonDto.PageResult[DTO], error) {
 	return pageQuery[DTO](query, page)
 }
 

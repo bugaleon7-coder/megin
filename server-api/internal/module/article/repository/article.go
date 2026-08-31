@@ -78,5 +78,5 @@ func (this *Article) GetPageList(req *dto.ArticleList) (*dto.PageResult[dto.Arti
 		query = query.Order("id desc")
 	}
 
-	return base.PageQueryDTO[dto.Article](query, req.PageQuery)
+	return this.PageQueryAs[dto.Article](query, req.PageQuery)
 }

@@ -134,10 +134,8 @@ func TestArticleDetail(t *testing.T) {
 
 func TestArticlePageList(t *testing.T) {
 	req := dto.ArticleList{
-		PageQuery: dto.PageQuery{
-			PageNo:   1,
-			PageSize: 10,
-		},
+		PageNo:   1,
+		PageSize: 10,
 	}
 	resp := test.GetWithToken("/api/article/pageList", GetToken(), req)
 	test.Print(resp.Body.String())

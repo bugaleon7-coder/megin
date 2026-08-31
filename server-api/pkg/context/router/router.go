@@ -205,30 +205,29 @@ func WrapHandlerWithBody[Req any, Resp any](fn func(*api.Context, Req) (Resp, er
 					Err:     err,
 				}
 				errmsg := api.Failed[error](respError, "绑定参数异常:"+zhError)
-				c.JSON(http.StatusOK, errmsg)
+				writeJSON(c, errmsg)
 				return
 			}
 			if err := binding.Validator.ValidateStruct(target); err != nil {
 				errmsg := api.Failed[error](err, "校验参数异常")
-				c.JSON(http.StatusOK, errmsg)
+				writeJSON(c, errmsg)
 				return
 			}
 		}
 
 		ctx, err := api.NewContext(c)
 		if err != nil {
-			c.JSON(http.StatusOK, api.Failed[error](err))
+			writeJSON(c, api.Failed[error](err))
 			return
 		}
-		opts := api.NewOptions(ctx, req, definitions...)
-		resp, err := api.Execute(opts, func() (Resp, error) { return fn(ctx, req) })
+		resp, err := executeHandler(ctx, req, definitions, fn)
 
 		if err != nil {
 			errmsg := api.Failed[error](err)
-			c.JSON(http.StatusOK, errmsg)
+			writeJSON(c, errmsg)
 			return
 		}
-		c.JSON(http.StatusOK, resp)
+		writeJSON(c, resp)
 	}
 }
 
@@ -285,25 +284,37 @@ func WrapHandlerForParams[Req any, Resp any](fn func(*api.Context, Req) (Resp, e
 		var req Req
 		if err := BindParams(c, requestBindingTarget(&req)); err != nil {
 			errmsg := api.Failed[error](err, "参数异常")
-			c.JSON(http.StatusOK, errmsg)
+			writeJSON(c, errmsg)
 			return
 		}
 
 		ctx, err := api.NewContext(c)
 		if err != nil {
-			c.JSON(http.StatusOK, api.Failed[error](err))
+			writeJSON(c, api.Failed[error](err))
 			return
 		}
 
-		opts := api.NewOptions(ctx, req, definitions...)
-		resp, err := api.Execute(opts, func() (Resp, error) { return fn(ctx, req) })
+		resp, err := executeHandler(ctx, req, definitions, fn)
 		if err != nil {
 			errmsg := api.Failed[error](err)
-			c.JSON(http.StatusOK, errmsg)
+			writeJSON(c, errmsg)
 			return
 		}
-		c.JSON(http.StatusOK, resp)
+		writeJSON(c, resp)
 	}
+}
+
+func executeHandler[Req any, Resp any](ctx *api.Context, req Req, definitions []api.RequestOption, fn func(*api.Context, Req) (Resp, error)) (Resp, error) {
+	if len(definitions) == 0 {
+		return fn(ctx, req)
+	}
+	opts := api.NewOptions(ctx, req, definitions...)
+	return api.Execute(opts, func() (Resp, error) { return fn(ctx, req) })
+}
+
+func writeJSON(c *gin.Context, response any) {
+	api.AttachTraceID(response, api.EnsureTraceID(c))
+	c.JSON(http.StatusOK, response)
 }
 
 func requestBindingTarget[Req any](req *Req) interface{} {

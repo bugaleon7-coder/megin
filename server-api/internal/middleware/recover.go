@@ -23,8 +23,9 @@ func Recover() gin.HandlerFunc {
 				}
 
 				result := api.Result[any]{
-					Code:   api.STATUS_SERVER_ERROR,
-					Trace:  normalizeStackLines(stack),
+					Code:    api.STATUS_SERVER_ERROR,
+					Trace:   normalizeStackLines(stack),
+					TraceId: api.EnsureTraceID(c),
 				}
 
 				switch errType := err.(type) {
@@ -36,8 +37,9 @@ func Recover() gin.HandlerFunc {
 					result.Message = "Unkonw Error"
 				}
 
-				logger.Error("请求错误", zap.Any("error", err))
-				logger.Error(fmt.Sprintf("请求错误堆栈:\n%s", stack))
+				log := logger.New(zap.String("trace_id", result.TraceId))
+				log.Error("请求错误", zap.Any("error", err))
+				log.Error(fmt.Sprintf("请求错误堆栈:\n%s", stack))
 				c.JSON(http.StatusOK, result)
 			}
 		}()

@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
 
@@ -98,7 +99,8 @@ type HandleFunc func(ctx *Context)
 func NewContext(ginCtx *gin.Context) (*Context, error) {
 	ctx := new(Context)
 	ctx.GinCtx = ginCtx
-	ctx.Log = logger.New()
+	ctx.TraceId = EnsureTraceID(ginCtx)
+	ctx.Log = logger.New(zap.String("trace_id", ctx.TraceId))
 	if claims, ok := getClaims(ginCtx, commonDto.AdminApiJwtClaims); ok {
 		ctx.AdminInfo = claims
 		ctx.Token = getTokenValue(ginCtx, commonDto.AdminApiClaimToken)

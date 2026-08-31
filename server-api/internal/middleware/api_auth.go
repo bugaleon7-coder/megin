@@ -2,8 +2,8 @@ package middleware
 
 import (
 	"errors"
+	bizcache "megin/internal/cache"
 	commonDto "megin/internal/module/common/dto"
-	userService "megin/internal/module/user/service"
 	"megin/pkg/context/api"
 	"megin/pkg/errs"
 	"net/http"
@@ -45,15 +45,21 @@ func ApiAuthTokenRequired() gin.HandlerFunc {
 			return
 		}
 
-		requestCtx, ctxErr := api.NewContext(context)
-		if ctxErr != nil {
-			result := api.Failed[error](ctxErr)
+		redisToken, err := bizcache.GetRedisString(bizcache.GetApiUserLoginTokenKey(uint(claims.UserID)))
+		if err != nil {
+			result := api.Failed[error](errs.NewNormalError(500, "读取前台用户登录token失败", err))
 			context.JSON(http.StatusOK, result)
 			context.Abort()
 			return
 		}
-		if err := userService.NewUser(requestCtx).ValidateLoginToken(uint(claims.UserID), tokenString); err != nil {
-			result := api.Failed[error](err)
+		if redisToken == "" {
+			result := api.Failed[error](errs.NewBusinessError(403, "登录状态已失效,请重新登录"))
+			context.JSON(http.StatusOK, result)
+			context.Abort()
+			return
+		}
+		if redisToken != tokenString {
+			result := api.Failed[error](errs.NewBusinessError(403, "您的帐户已在其他设备登录,请重新登录"))
 			context.JSON(http.StatusOK, result)
 			context.Abort()
 			return

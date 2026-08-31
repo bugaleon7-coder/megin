@@ -7,12 +7,34 @@ import (
 )
 
 type Result[T any] struct {
-	Code    int    `json:"code"`     //返回编码200为成功,其它编号为异常
-	Message string `json:"message"`  //返回错误信息
-	Data    T      `json:"data"`     //返回的数值
+	Code    int      `json:"code"`            //返回编码200为成功,其它编号为异常
+	Message string   `json:"message"`         //返回错误信息
+	Data    T        `json:"data"`            //返回的数值
 	Trace   []string `json:"trace,omitempty"` //错误堆栈明细,按行拆分
-	TraceId string `json:"trace_id"` //请求链路ID,可用来方便查询log
-	Success bool   `json:"success"`  //是否成功
+	TraceId string   `json:"trace_id"`        //请求链路ID,可用来方便查询log
+	Success bool     `json:"success"`         //是否成功
+}
+
+type traceIDSetter interface {
+	SetTraceID(string)
+}
+
+// SetTraceID assigns the request trace ID to a standard API result.
+func (r *Result[T]) SetTraceID(traceID string) {
+	if r != nil {
+		r.TraceId = traceID
+	}
+}
+
+// AttachTraceID adds the request trace ID to standard API results. It accepts an
+// interface so generic route wrappers can apply it without knowing T.
+func AttachTraceID(result any, traceID string) {
+	if result == nil || traceID == "" {
+		return
+	}
+	if setter, ok := result.(traceIDSetter); ok {
+		setter.SetTraceID(traceID)
+	}
 }
 
 func ResultSuccess() (*Result[any], error) {

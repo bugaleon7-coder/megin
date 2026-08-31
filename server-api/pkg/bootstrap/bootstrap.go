@@ -44,9 +44,10 @@ func ServerInitWithMode(configPath string, mode string, onStart func() error) {
 func SetupTestRouter() *gin.Engine {
 	//设为release,要不然输出的东西太多，影响视线
 	gin.SetMode(gin.ReleaseMode)
-	ginRouter := gin.Default()
+	ginRouter := gin.New()
 	registry := router.NewRouteRegistry(ginRouter)
 	registry.Use(middleware.Cors())
+	registry.Use(middleware.TraceID())
 	registry.Use(middleware.RequestLog())
 	registry.Use(middleware.Recover())
 
@@ -60,6 +61,7 @@ func SetupTestRouter() *gin.Engine {
 
 // 3,启动服务1
 func ServerRun() {
+	defer func() { _ = logger.Sync() }()
 	conf := config.GetConfig()
 	//1,Gin框架初始化
 	route := xrouter.InitGinRouter(xrouter.RouterModules{

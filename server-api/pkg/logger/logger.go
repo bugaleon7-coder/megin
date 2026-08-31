@@ -4,6 +4,7 @@ import (
 	"io"
 	"math/rand"
 	"os"
+	"sync/atomic"
 	"time"
 
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
@@ -14,7 +15,10 @@ import (
 var (
 	LogLevel       = zap.DebugLevel
 	DefaultLogPath = "./logs/"
+	asyncLogDrops  atomic.Uint64
 )
+
+const asyncLogQueueSize = 4096
 
 type LogConfig struct {
 	LogPath      string // logPath 日志文件路径
@@ -28,7 +32,61 @@ type LogConfig struct {
 	LogInConsole bool   // logInConsole 是否同时输出到控制台
 }
 
-var logger *zap.Logger
+// Use a no-op logger until configuration is loaded, so request contexts remain safe in tests and early startup.
+var logger = zap.NewNop()
+
+type asyncLogEntry struct {
+	data []byte
+	ack  chan error
+}
+
+// asyncWriteSyncer moves low-priority log I/O off the request goroutine.
+// A full queue drops only those logs; WARN and above use a synchronous writer.
+type asyncWriteSyncer struct {
+	writer zapcore.WriteSyncer
+	queue  chan asyncLogEntry
+}
+
+func newAsyncWriteSyncer(writer zapcore.WriteSyncer) *asyncWriteSyncer {
+	w := &asyncWriteSyncer{
+		writer: writer,
+		queue:  make(chan asyncLogEntry, asyncLogQueueSize),
+	}
+	go w.run()
+	return w
+}
+
+func (w *asyncWriteSyncer) run() {
+	for entry := range w.queue {
+		if entry.ack != nil {
+			entry.ack <- w.writer.Sync()
+			continue
+		}
+		_, _ = w.writer.Write(entry.data)
+	}
+}
+
+func (w *asyncWriteSyncer) Write(p []byte) (int, error) {
+	entry := asyncLogEntry{data: append([]byte(nil), p...)}
+	select {
+	case w.queue <- entry:
+		return len(p), nil
+	default:
+		asyncLogDrops.Add(1)
+		return len(p), nil
+	}
+}
+
+func (w *asyncWriteSyncer) Sync() error {
+	ack := make(chan error, 1)
+	w.queue <- asyncLogEntry{ack: ack}
+	return <-ack
+}
+
+// DroppedAsyncLogCount returns the number of low-priority log entries dropped because the queue was full.
+func DroppedAsyncLogCount() uint64 {
+	return asyncLogDrops.Load()
+}
 
 func InitLog(config LogConfig) {
 	encoderConfig := zapcore.EncoderConfig{
@@ -51,16 +109,19 @@ func InitLog(config LogConfig) {
 	infoLevel := zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
 		return lvl == zapcore.InfoLevel
 	})
+	lowPriorityLevel := zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
+		return lvl <= zapcore.InfoLevel
+	})
 	warnLevel := zap.LevelEnablerFunc(func(lvl zapcore.Level) bool {
 		return lvl >= zapcore.WarnLevel
 	})
 	// 获取 info、warn日志文件的io.Writer 抽象 getWriter() 在下方实现
-	infoWriter := getWriter(DefaultLogPath + "info.log")
-	warnWriter := getWriter(DefaultLogPath + "error.log")
+	infoWriter := zapcore.AddSync(getWriter(DefaultLogPath + "info.log"))
+	warnWriter := zapcore.AddSync(getWriter(DefaultLogPath + "error.log"))
 
 	cores := []zapcore.Core{
-		zapcore.NewCore(fileEncoder, zapcore.AddSync(infoWriter), infoLevel),
-		zapcore.NewCore(fileEncoder, zapcore.AddSync(warnWriter), warnLevel),
+		zapcore.NewCore(fileEncoder, newAsyncWriteSyncer(infoWriter), infoLevel),
+		zapcore.NewCore(fileEncoder, warnWriter, warnLevel),
 	}
 
 	//TODO::在配置文件中增加选项,决定是否开启
@@ -69,7 +130,11 @@ func InitLog(config LogConfig) {
 		if !config.JsonFormat {
 			consoleEncoder = zapcore.NewConsoleEncoder(encoderConfig)
 		}
-		cores = append(cores, zapcore.NewCore(consoleEncoder, zapcore.AddSync(zapcore.Lock(os.Stdout)), zap.DebugLevel))
+		consoleWriter := zapcore.AddSync(zapcore.Lock(os.Stdout))
+		cores = append(cores,
+			zapcore.NewCore(consoleEncoder, newAsyncWriteSyncer(consoleWriter), lowPriorityLevel),
+			zapcore.NewCore(consoleEncoder, consoleWriter, warnLevel),
+		)
 	}
 
 	// 最后创建具体的Logger
@@ -80,6 +145,11 @@ func InitLog(config LogConfig) {
 		zap.AddStacktrace(zap.ErrorLevel),
 	) // 需要传入 zap.AddCaller() 才会显示打日志点的文件名和行数, 有点小坑
 
+}
+
+// Sync flushes pending asynchronous logs. It should be called during graceful shutdown.
+func Sync() error {
+	return logger.Sync()
 }
 
 func getWriter(filename string) io.Writer {
@@ -128,33 +198,36 @@ func Fatal(msg string, fields ...zap.Field) {
 
 // 对象化接口
 type Logger struct {
+	logger *zap.Logger
 }
 
-func New() *Logger {
-	return &Logger{}
+func New(fields ...zap.Field) *Logger {
+	return &Logger{logger: logger.With(fields...)}
 }
 
 func (l *Logger) Debug(msg string, fields ...zap.Field) {
-	logger.Debug(msg, fields...)
+	l.logger.Debug(msg, fields...)
 }
 
 func (l *Logger) Info(msg string, fields ...zap.Field) {
-	logger.Info(msg, fields...)
+	l.logger.Info(msg, fields...)
 }
 
 func (l *Logger) InfoRand(msg string, fields ...zap.Field) {
-	InfoRand(msg, fields...)
+	if rand.Int31n(100) == 1 {
+		l.logger.Info(msg, fields...)
+	}
 }
 
 func (l *Logger) Warn(msg string, fields ...zap.Field) {
-	logger.Warn(msg, fields...)
+	l.logger.Warn(msg, fields...)
 }
 
 func (l *Logger) Error(msg string, fields ...zap.Field) {
-	logger.Error(msg, fields...)
+	l.logger.Error(msg, fields...)
 }
 
 // 慎用
 func (l *Logger) Fatal(msg string, fields ...zap.Field) {
-	logger.Fatal(msg, fields...)
+	l.logger.Fatal(msg, fields...)
 }

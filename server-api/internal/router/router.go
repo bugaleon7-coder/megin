@@ -28,12 +28,13 @@ type RouterModules struct {
 func InitGinRouter(modules RouterModules) *gin.Engine {
 	//初始化数据
 	gin.SetMode(gin.DebugMode)
-	ginRouter := gin.Default()
+	ginRouter := gin.New()
 
 	registry := router.NewRouteRegistry(ginRouter)
 
 	registry.Use(middleware.Cors())
 	registry.Use(gzip.Gzip(gzip.DefaultCompression))
+	registry.Use(middleware.TraceID())
 	registry.Use(middleware.RequestLog())
 	registry.Use(middleware.Recover())
 

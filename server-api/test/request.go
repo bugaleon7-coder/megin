@@ -2,7 +2,8 @@ package test
 
 import (
 	"bytes"
-	"encoding/json"
+	"encoding/json/jsontext"
+	"encoding/json/v2"
 	"fmt"
 	"megin/pkg/bootstrap"
 	"megin/pkg/utils"
@@ -167,7 +168,9 @@ func Print(data interface{}) {
 	}
 
 	var out bytes.Buffer
-	_ = json.Indent(&out, res, "", "\t")
+	formatted := jsontext.Value(res)
+	_ = formatted.Indent(jsontext.WithIndent("\t"))
+	_, _ = out.Write(formatted)
 	out.WriteTo(os.Stdout)
 	fmt.Printf("\n")
 }

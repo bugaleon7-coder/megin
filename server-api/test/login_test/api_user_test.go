@@ -1,7 +1,7 @@
 package article_test
 
 import (
-	"encoding/json"
+	"encoding/json/v2"
 	"megin/internal"
 	"megin/internal/config"
 	authDto "megin/internal/module/auth/dto"

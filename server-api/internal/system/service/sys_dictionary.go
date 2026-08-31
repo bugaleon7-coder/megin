@@ -1,7 +1,7 @@
 package service
 
 import (
-	"encoding/json"
+	"encoding/json/v2"
 	"megin/internal/base"
 	systemDto "megin/internal/system/dto"
 	"megin/internal/system/model"

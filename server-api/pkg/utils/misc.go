@@ -4,7 +4,7 @@ import (
 	"context"
 	"crypto/md5"
 	"encoding/hex"
-	"encoding/json"
+	"encoding/json/v2"
 	"log"
 	"math/rand"
 	"os"

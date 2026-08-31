@@ -2,7 +2,7 @@ package model
 
 import (
 	"database/sql/driver"
-	"encoding/json"
+	"encoding/json/v2"
 	"errors"
 )
 

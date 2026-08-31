@@ -2,7 +2,8 @@ package service
 
 import (
 	"context"
-	"encoding/json"
+	"encoding/json/jsontext"
+	"encoding/json/v2"
 	"megin/internal/base"
 	"megin/internal/system/dto"
 	"megin/internal/system/model"
@@ -237,7 +238,7 @@ func (s *SysVersion) ExportVersionPayload(versionName, versionCode, description 
 		Apis:         apis,
 		Dictionaries: dicts,
 	}
-	return json.MarshalIndent(exportData, "", "  ")
+	return json.Marshal(exportData, jsontext.WithIndent("  "))
 }
 
 func strPtr(v string) *string {

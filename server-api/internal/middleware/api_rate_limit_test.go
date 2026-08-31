@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"encoding/json"
+	"encoding/json/v2"
 	"fmt"
 	"megin/internal/config"
 	commonDto "megin/internal/module/common/dto"

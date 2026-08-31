@@ -2,7 +2,7 @@ package router
 
 import (
 	"bytes"
-	"encoding/json"
+	"encoding/json/jsontext"
 	"errors"
 	"net/http/httptest"
 	"testing"
@@ -62,7 +62,7 @@ func TestWrapHandlerForParamsWritesOneResponseOnError(t *testing.T) {
 	})
 	handler(c)
 
-	if !json.Valid(w.Body.Bytes()) {
+	if !jsontext.Value(w.Body.Bytes()).IsValid() {
 		t.Fatalf("handler wrote multiple or invalid JSON responses: %q", w.Body.String())
 	}
 }
@@ -91,7 +91,7 @@ func TestWrapHandlerWithBodyRejectsEmptyPointerRequest(t *testing.T) {
 	if called {
 		t.Fatal("handler should not be called when required body is empty")
 	}
-	if !json.Valid(w.Body.Bytes()) {
+	if !jsontext.Value(w.Body.Bytes()).IsValid() {
 		t.Fatalf("handler wrote invalid JSON response: %q", w.Body.String())
 	}
 }

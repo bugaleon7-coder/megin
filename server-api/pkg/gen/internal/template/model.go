@@ -5,7 +5,7 @@ const Model = NotEditMark + `
 package {{.StructInfo.Package}}
 
 import (
-	"encoding/json"
+	"encoding/json/v2"
 	"time"
 
 	"gorm.io/datatypes"

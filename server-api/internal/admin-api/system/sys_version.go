@@ -1,7 +1,8 @@
 package system
 
 import (
-	"encoding/json"
+	"encoding/json/jsontext"
+	"encoding/json/v2"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -123,7 +124,7 @@ func (this *SysVersion) DownloadVersionJson(ctx *api.Context, req *systemDto.Get
 			Menus: []systemModel.SysBaseMenu{},
 			Apis:  []systemModel.SysApi{},
 		}
-		jsonData, err = json.MarshalIndent(basic, "", "  ")
+		jsonData, err = json.Marshal(basic, jsontext.WithIndent("  "))
 		if err != nil {
 			return nil, err
 		}

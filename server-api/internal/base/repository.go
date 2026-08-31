@@ -198,8 +198,19 @@ func BuildQueryConditions(query *gorm.DB, filter commonDto.QueryFilter, keywordF
 	return query
 }
 
-func PageQuery[T Model](query *gorm.DB, page commonDto.PageQuery) (*commonDto.PageResult[T], error) {
-	result := new(commonDto.PageResult[T])
+// PageQuery 查询当前仓储模型的分页数据。
+func (this *Repository[T]) PageQuery(query *gorm.DB, page commonDto.PageQuery) (*commonDto.PageResult[T], error) {
+	return pageQuery[T](query, page)
+}
+
+// PageQueryDTO 执行分页查询，并将每一行扫描到指定的 DTO。
+// query 必须指定模型（例如 db.Model(&Article{})），且查询字段名或别名应与 DTO 字段对应。
+func PageQueryDTO[DTO any](query *gorm.DB, page commonDto.PageQuery) (*commonDto.PageResult[DTO], error) {
+	return pageQuery[DTO](query, page)
+}
+
+func pageQuery[Result any](query *gorm.DB, page commonDto.PageQuery) (*commonDto.PageResult[Result], error) {
+	result := new(commonDto.PageResult[Result])
 	if page.PageNo == 0 {
 		page.PageNo = 1
 	}
@@ -211,7 +222,7 @@ func PageQuery[T Model](query *gorm.DB, page commonDto.PageQuery) (*commonDto.Pa
 	result.PageNo = page.PageNo
 	result.PageSize = page.PageSize
 	offset := (page.PageNo - 1) * page.PageSize
-	var rows []T
+	var rows []Result
 	err := query.Count(&result.TotalSize).Error
 	if err != nil {
 		return nil, err

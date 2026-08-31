@@ -89,24 +89,5 @@ func (this *Article) Delete(id int) error {
 
 // 分页查询文章列表
 func (this *Article) GetPageList(req *dto.ArticleList) (*dto.PageResult[dto.Article], error) {
-	// 1. 获取分页文章列表
-	result, err := this.Repo.GetPageList(req)
-	if err != nil {
-		return nil, err
-	}
-
-	// 2. 创建结果集
-	pageResult := &dto.PageResult[dto.Article]{
-		PageNo:    result.PageNo,
-		PageSize:  result.PageSize,
-		TotalSize: result.TotalSize,
-		TotalPage: result.TotalPage,
-		List:      make([]dto.Article, len(result.List)),
-	}
-
-	// 5. 处理文章数据，添加分类信息
-	for i, article := range result.List {
-		pageResult.List[i] = convert.ToArticleDTO(article)
-	}
-	return pageResult, nil
+	return this.Repo.GetPageList(req)
 }

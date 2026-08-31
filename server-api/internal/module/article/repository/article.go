@@ -32,7 +32,7 @@ func (this *Article) Delete(id int) error {
 }
 
 // 分页查询文章列表
-func (this *Article) GetPageList(req *dto.ArticleList) (*dto.PageResult[model.Article], error) {
+func (this *Article) GetPageList(req *dto.ArticleList) (*dto.PageResult[dto.Article], error) {
 	query := this.DB().Model(&model.Article{})
 
 	// 添加查询条件
@@ -78,6 +78,5 @@ func (this *Article) GetPageList(req *dto.ArticleList) (*dto.PageResult[model.Ar
 		query = query.Order("id desc")
 	}
 
-	// 使用通用分页查询函数
-	return base.PageQuery[model.Article](query, req.PageQuery)
+	return base.PageQueryDTO[dto.Article](query, req.PageQuery)
 }

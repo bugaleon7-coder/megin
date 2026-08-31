@@ -20,6 +20,11 @@ var (
 	articleId int
 )
 
+const (
+	username = "admin"
+	password = "123456"
+)
+
 // TestMain 测试入口函数，初始化服务
 func TestMain(m *testing.M) {
 	bootstrap.ServerInitWithMode("../../config/config-dev.yaml", config.RunModeMixed, internal.OnServerStart)
@@ -128,15 +133,19 @@ func TestArticleDetail(t *testing.T) {
 }
 
 func TestArticlePageList(t *testing.T) {
-	req := map[string]interface{}{
-		"category1": 1,  // 替换为实际存在的分类ID
-		"category2": 2,  // 替换为实际存在的分类ID
-		"source":    1,  // 替换为实际存在的来源ID
-		"page":      1,  // 页码
-		"page_size": 10, // 每页数量，注意这里使用下划线格式
+	req := dto.ArticleList{
+		PageQuery: dto.PageQuery{
+			PageNo:   1,
+			PageSize: 10,
+		},
 	}
-	resp := test.Get("/admin-api/article/pageList", req)
+	resp := test.GetWithToken("/api/article/pageList", GetToken(), req)
 	test.Print(resp.Body.String())
+}
+
+// GetToken 登录并返回后台接口所需的 Token。
+func GetToken() string {
+	return test.Login(username, password)
 }
 
 func TestArticleDelete(t *testing.T) {

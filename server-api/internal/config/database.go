@@ -22,7 +22,8 @@ func InitDatabase(conf *ServiceConfig) {
 	//连接mysql
 	if conf.Database.Driver == "mysql" && len(conf.Database.Dsn) > 0 {
 		db, err := gorm.Open(mysql.Open(conf.Database.Dsn), &gorm.Config{
-			Logger: logger.Default.LogMode(logger.Info),
+			Logger:                 logger.Default.LogMode(logger.Info),
+			SkipDefaultTransaction: conf.Database.SkipDefaultTransaction,
 		})
 
 		if err != nil {

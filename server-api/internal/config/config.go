@@ -36,8 +36,9 @@ type AppConfig struct {
 }
 
 type Database struct {
-	Dsn    string `yaml:"dsn"`
-	Driver string `yaml:"driver"`
+	Dsn                    string `yaml:"dsn"`
+	Driver                 string `yaml:"driver"`
+	SkipDefaultTransaction bool   `yaml:"skip_default_transaction"`
 }
 
 type Redis struct {

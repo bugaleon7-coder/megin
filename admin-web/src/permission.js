@@ -29,13 +29,6 @@ const setupRouter = async (userStore) => {
   }
 }
 
-// 移除加载动画
-const removeLoading = () => {
-  const element = document.getElementById('gva-loading-box')
-  element?.remove()
-}
-
-
 // 路由守卫
 router.beforeEach(async (to, from) => {
   const userStore = useUserStore()
@@ -103,6 +96,3 @@ router.onError((error) => {
   console.error('Router error:', error)
   Nprogress.remove()
 })
-
-// 移除初始加载动画
-removeLoading()

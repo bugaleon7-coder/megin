@@ -1,26 +1,26 @@
 <template>
-  <div id="userLayout" class="w-full h-full relative">
+  <div
+    id="userLayout"
+    class="relative w-full h-full overflow-hidden bg-center bg-cover bg-no-repeat"
+    :style="{ backgroundImage: `url(${loginBackground})` }"
+  >
     <div
-      class="rounded-lg flex items-center justify-evenly w-full h-full md:w-screen md:h-screen md:bg-[#194bfb] bg-white"
-    >
-      <div class="md:w-3/5 w-10/12 h-full flex items-center justify-evenly">
-        <div
-          class="oblique h-[130%] w-3/5 bg-white dark:bg-slate-900 transform -rotate-12 absolute -ml-52"
-        />
-        <!-- 分割斜块 -->
-        <div
-          class="z-[999] pt-12 pb-10 md:w-96 w-full rounded-lg flex flex-col justify-between box-border"
-        >
+      class="absolute inset-0 bg-[linear-gradient(118deg,rgba(8,30,58,0.58),rgba(15,23,42,0.16)_52%,rgba(8,47,73,0.42))]"
+    />
+    <div class="relative z-10 flex min-h-full items-center justify-center px-5 py-16 md:min-h-screen">
+      <div
+        class="w-full max-w-md rounded-2xl border border-white/70 bg-white/68 px-7 py-10 shadow-[0_24px_70px_rgba(15,23,42,0.28)] backdrop-blur-2xl backdrop-saturate-150 transition-opacity duration-500 ease-out dark:border-slate-500/30 dark:bg-slate-900/68 sm:px-10 md:max-w-xl md:rounded-3xl md:px-14 md:py-12"
+        :class="loginVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'"
+      >
+        <div class="flex flex-col justify-between box-border">
           <div>
-            <div class="flex items-center justify-center">
-              <Logo :size="6" />
-            </div>
-            <div class="mb-9">
-              <p class="text-center text-4xl font-bold">
-                {{ $GIN_VUE_ADMIN.appName }}
+            <div class="mb-11">
+              <p class="flex items-center justify-center gap-2.5 text-center text-4xl font-bold">
+                <Logo :size="1.75" />
+                <span>{{ $GIN_VUE_ADMIN.appName }}</span>
               </p>
-              <p class="text-center text-sm font-normal text-gray-500 mt-2.5">
-                A management platform using Golang and Vue
+              <p class="mt-3 text-center text-sm font-normal text-gray-500">
+                初始帐号密码: admin/123456
               </p>
             </div>
             <el-form
@@ -100,13 +100,6 @@
           </div>
         </div>
       </div>
-      <div class="hidden md:block w-1/2 h-full float-right bg-[#194bfb]">
-        <img
-          class="h-full"
-          src="@/assets/login_right_banner.jpg"
-          alt="banner"
-        />
-      </div>
     </div>
 
     <BottomInfo class="left-0 right-0 absolute bottom-3 mx-auto w-full z-20" />
@@ -117,15 +110,42 @@
   import { captcha, getLoginConfig } from '@/api/user'
   import { checkDB } from '@/api/initdb'
   import BottomInfo from '@/components/bottomInfo/bottomInfo.vue'
-  import { reactive, ref } from 'vue'
+  import { onMounted, reactive, ref } from 'vue'
   import { ElMessage } from 'element-plus'
   import { useRouter } from 'vue-router'
   import { useUserStore } from '@/pinia/modules/user'
   import Logo from '@/components/logo/index.vue'
   import { isDev } from '@/utils/env.js'
+  import loginBackground from '@/assets/login_right_banner.jpg'
 
   defineOptions({
     name: 'Login'
+  })
+
+  const backgroundReady = ref(false)
+  const configReady = ref(false)
+  const loginVisible = ref(false)
+
+  const revealLogin = () => {
+    if (!backgroundReady.value || !configReady.value || loginVisible.value) {
+      return
+    }
+    requestAnimationFrame(() => {
+      loginVisible.value = true
+      window.setTimeout(() => document.getElementById('gva-loading-box')?.remove(), 80)
+    })
+  }
+
+  const dismissInitialLoading = () => {
+    backgroundReady.value = true
+    revealLogin()
+  }
+
+  onMounted(() => {
+    const image = new Image()
+    image.onload = dismissInitialLoading
+    image.onerror = dismissInitialLoading
+    image.src = loginBackground
   })
 
   const router = useRouter()
@@ -187,13 +207,18 @@
 
   // 获取验证码
   const loadLoginConfig = async () => {
-    const [captchaRes, configRes] = await Promise.all([captcha(), getLoginConfig()])
-    captchaRequiredLength.value = Number(captchaRes.data?.captchaLength) || 0
-    picPath.value = captchaRes.data?.picPath
-    loginFormData.captchaId = captchaRes.data?.captchaId
-    loginFormData.openCaptcha = captchaRes.data?.openCaptcha
-    totpEnabled.value = Boolean(configRes.data?.totpEnabled)
-    totpIssuer.value = configRes.data?.totpIssuer || ''
+    try {
+      const [captchaRes, configRes] = await Promise.all([captcha(), getLoginConfig()])
+      captchaRequiredLength.value = Number(captchaRes.data?.captchaLength) || 0
+      picPath.value = captchaRes.data?.picPath
+      loginFormData.captchaId = captchaRes.data?.captchaId
+      loginFormData.openCaptcha = captchaRes.data?.openCaptcha
+      totpEnabled.value = Boolean(configRes.data?.totpEnabled)
+      totpIssuer.value = configRes.data?.totpIssuer || ''
+    } finally {
+      configReady.value = true
+      revealLogin()
+    }
   }
   loadLoginConfig()
 

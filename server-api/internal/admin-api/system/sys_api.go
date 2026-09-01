@@ -12,7 +12,7 @@ type SysApi struct{}
 
 // @Summary 创建API
 // @Description 创建系统API
-func (this *SysApi) CreateApi(ctx *api.Context, req *systemDto.CreateApiReq) (*api.Result[any], error) {
+func (this *SysApi) CreateApi(ctx *api.Context, req *systemDto.CreateApiReq) (*api.Result[Success], error) {
 	err := systemService.NewSysApi(ctx).CreateApi(req)
 	if err != nil {
 		return nil, err
@@ -22,7 +22,7 @@ func (this *SysApi) CreateApi(ctx *api.Context, req *systemDto.CreateApiReq) (*a
 
 // @Summary 删除API
 // @Description 删除系统API
-func (this *SysApi) DeleteApi(ctx *api.Context, req *systemDto.DeleteApiReq) (*api.Result[any], error) {
+func (this *SysApi) DeleteApi(ctx *api.Context, req *systemDto.DeleteApiReq) (*api.Result[Success], error) {
 	err := systemService.NewSysApi(ctx).DeleteApi(req.ID)
 	if err != nil {
 		return nil, err
@@ -32,7 +32,7 @@ func (this *SysApi) DeleteApi(ctx *api.Context, req *systemDto.DeleteApiReq) (*a
 
 // @Summary 更新API
 // @Description 更新系统API信息
-func (this *SysApi) UpdateApi(ctx *api.Context, req *systemDto.UpdateApiReq) (*api.Result[any], error) {
+func (this *SysApi) UpdateApi(ctx *api.Context, req *systemDto.UpdateApiReq) (*api.Result[Success], error) {
 	err := systemService.NewSysApi(ctx).UpdateApi(req)
 	if err != nil {
 		return nil, err
@@ -82,7 +82,7 @@ func (this *SysApi) GetApiGroups(ctx *api.Context, req *commonDto.EmptyReq) (*ap
 
 // @Summary 批量删除API
 // @Description 批量删除系统API
-func (this *SysApi) DeleteApisByIds(ctx *api.Context, req *systemDto.DeleteApisByIdsReq) (*api.Result[any], error) {
+func (this *SysApi) DeleteApisByIds(ctx *api.Context, req *systemDto.DeleteApisByIdsReq) (*api.Result[Success], error) {
 	err := systemService.NewSysApi(ctx).DeleteApisByIds(req.Ids)
 	if err != nil {
 		return nil, err
@@ -92,7 +92,7 @@ func (this *SysApi) DeleteApisByIds(ctx *api.Context, req *systemDto.DeleteApisB
 
 // @Summary 刷新Casbin缓存
 // @Description 从数据库重新加载Casbin策略
-func (this *SysApi) FreshCasbin(ctx *api.Context, req *commonDto.EmptyReq) (*api.Result[any], error) {
+func (this *SysApi) FreshCasbin(ctx *api.Context, req *commonDto.EmptyReq) (*api.Result[Success], error) {
 	err := systemService.NewSysApi(ctx).FreshCasbin()
 	if err != nil {
 		return nil, err
@@ -112,7 +112,7 @@ func (this *SysApi) SyncApi(ctx *api.Context, req *commonDto.EmptyReq) (*api.Res
 
 // @Summary 忽略API
 // @Description 设置API为忽略状态
-func (this *SysApi) IgnoreApi(ctx *api.Context, req *systemDto.IgnoreApiReq) (*api.Result[any], error) {
+func (this *SysApi) IgnoreApi(ctx *api.Context, req *systemDto.IgnoreApiReq) (*api.Result[Success], error) {
 	err := systemService.NewSysApi(ctx).IgnoreApi(req)
 	if err != nil {
 		return nil, err
@@ -122,7 +122,7 @@ func (this *SysApi) IgnoreApi(ctx *api.Context, req *systemDto.IgnoreApiReq) (*a
 
 // @Summary 确认同步API
 // @Description 确认执行API同步操作
-func (this *SysApi) EnterSyncApi(ctx *api.Context, req *systemDto.EnterSyncApiReq) (*api.Result[any], error) {
+func (this *SysApi) EnterSyncApi(ctx *api.Context, req *systemDto.EnterSyncApiReq) (*api.Result[Success], error) {
 	err := systemService.NewSysApi(ctx).EnterSyncApi(req)
 	if err != nil {
 		return nil, err
@@ -146,7 +146,7 @@ func (this *SysApi) GetApiRoles(ctx *api.Context, req *systemDto.GetApiRolesReq)
 
 // @Summary 设置API角色列表
 // @Description 全量覆盖某API关联的角色列表
-func (this *SysApi) SetApiRoles(ctx *api.Context, req *systemDto.SetApiRolesReq) (*api.Result[any], error) {
+func (this *SysApi) SetApiRoles(ctx *api.Context, req *systemDto.SetApiRolesReq) (*api.Result[Success], error) {
 	casbinService := systemService.NewSysCasbin(ctx)
 	err := casbinService.SetApiAuthorities(req.Path, req.Method, req.AuthorityIds)
 	if err != nil {

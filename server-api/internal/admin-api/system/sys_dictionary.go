@@ -12,7 +12,7 @@ type SysDictionary struct{}
 
 // @Summary 创建字典
 // @Description 创建系统字典
-func (this *SysDictionary) CreateSysDictionary(ctx *api.Context, req *systemDto.CreateDictionaryReq) (*api.Result[any], error) {
+func (this *SysDictionary) CreateSysDictionary(ctx *api.Context, req *systemDto.CreateDictionaryReq) (*api.Result[Success], error) {
 	err := systemService.NewSysDictionary(ctx).CreateSysDictionary(req)
 	if err != nil {
 		return nil, err
@@ -22,7 +22,7 @@ func (this *SysDictionary) CreateSysDictionary(ctx *api.Context, req *systemDto.
 
 // @Summary 删除字典
 // @Description 删除系统字典
-func (this *SysDictionary) DeleteSysDictionary(ctx *api.Context, req *systemDto.DeleteDictionaryReq) (*api.Result[any], error) {
+func (this *SysDictionary) DeleteSysDictionary(ctx *api.Context, req *systemDto.DeleteDictionaryReq) (*api.Result[Success], error) {
 	err := systemService.NewSysDictionary(ctx).DeleteSysDictionary(req.ID)
 	if err != nil {
 		return nil, err
@@ -32,7 +32,7 @@ func (this *SysDictionary) DeleteSysDictionary(ctx *api.Context, req *systemDto.
 
 // @Summary 更新字典
 // @Description 更新系统字典信息
-func (this *SysDictionary) UpdateSysDictionary(ctx *api.Context, req *systemDto.UpdateDictionaryReq) (*api.Result[any], error) {
+func (this *SysDictionary) UpdateSysDictionary(ctx *api.Context, req *systemDto.UpdateDictionaryReq) (*api.Result[Success], error) {
 	err := systemService.NewSysDictionary(ctx).UpdateSysDictionary(req)
 	if err != nil {
 		return nil, err
@@ -92,7 +92,7 @@ func (this *SysDictionary) ExportSysDictionary(ctx *api.Context, req *commonDto.
 
 // @Summary 导入字典
 // @Description 从JSON导入字典数据
-func (this *SysDictionary) ImportSysDictionary(ctx *api.Context, req *systemDto.ImportDictionaryReq) (*api.Result[any], error) {
+func (this *SysDictionary) ImportSysDictionary(ctx *api.Context, req *systemDto.ImportDictionaryReq) (*api.Result[Success], error) {
 	err := systemService.NewSysDictionary(ctx).ImportSysDictionary(req.Json)
 	if err != nil {
 		return nil, err

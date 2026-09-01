@@ -8,7 +8,7 @@ import (
 
 type Customer struct{}
 
-func (h *Customer) Create(ctx *api.Context, req *customerDto.CreateCustomerReq) (*api.Result[any], error) {
+func (h *Customer) Create(ctx *api.Context, req *customerDto.CreateCustomerReq) (*api.Result[Success], error) {
 	err := customerService.NewCustomer(ctx).Create(req, uint(ctx.AdminInfo.UserID), uint(ctx.AdminInfo.RoleId))
 	if err != nil {
 		return nil, err
@@ -16,7 +16,7 @@ func (h *Customer) Create(ctx *api.Context, req *customerDto.CreateCustomerReq) 
 	return api.ResultSuccess()
 }
 
-func (h *Customer) Update(ctx *api.Context, req *customerDto.UpdateCustomerReq) (*api.Result[any], error) {
+func (h *Customer) Update(ctx *api.Context, req *customerDto.UpdateCustomerReq) (*api.Result[Success], error) {
 	err := customerService.NewCustomer(ctx).Update(req)
 	if err != nil {
 		return nil, err
@@ -24,7 +24,7 @@ func (h *Customer) Update(ctx *api.Context, req *customerDto.UpdateCustomerReq) 
 	return api.ResultSuccess()
 }
 
-func (h *Customer) Delete(ctx *api.Context, req *customerDto.DeleteCustomerReq) (*api.Result[any], error) {
+func (h *Customer) Delete(ctx *api.Context, req *customerDto.DeleteCustomerReq) (*api.Result[Success], error) {
 	err := customerService.NewCustomer(ctx).Delete(req.ID)
 	if err != nil {
 		return nil, err

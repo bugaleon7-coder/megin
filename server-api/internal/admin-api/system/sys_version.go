@@ -18,7 +18,7 @@ import (
 // SysVersion @Tag 版本管理
 type SysVersion struct{}
 
-func (this *SysVersion) DeleteSysVersion(ctx *api.Context, req *systemDto.GetSysVersionReq) (*api.Result[any], error) {
+func (this *SysVersion) DeleteSysVersion(ctx *api.Context, req *systemDto.GetSysVersionReq) (*api.Result[Success], error) {
 	err := systemService.NewSysVersion(ctx).DeleteSysVersion(ctx.GinCtx.Request.Context(), strconv.FormatUint(uint64(req.ID), 10))
 	if err != nil {
 		return nil, err
@@ -26,7 +26,7 @@ func (this *SysVersion) DeleteSysVersion(ctx *api.Context, req *systemDto.GetSys
 	return api.ResultSuccess()
 }
 
-func (this *SysVersion) DeleteSysVersionByIds(ctx *api.Context, req *systemDto.DeleteSysVersionByIdsReq) (*api.Result[any], error) {
+func (this *SysVersion) DeleteSysVersionByIds(ctx *api.Context, req *systemDto.DeleteSysVersionByIdsReq) (*api.Result[Success], error) {
 	ids := make([]string, 0, len(req.IDs))
 	for _, id := range req.IDs {
 		ids = append(ids, strconv.FormatUint(uint64(id), 10))
@@ -59,7 +59,7 @@ func (this *SysVersion) GetSysVersionPublic(ctx *api.Context, req *commonDto.Emp
 	return api.ResultData[any](map[string]any{"info": "不需要鉴权的版本管理接口信息"})
 }
 
-func (this *SysVersion) ExportVersion(ctx *api.Context, req *systemDto.ExportVersionRequest) (*api.Result[any], error) {
+func (this *SysVersion) ExportVersion(ctx *api.Context, req *systemDto.ExportVersionRequest) (*api.Result[Success], error) {
 	svc := systemService.NewSysVersion(ctx)
 
 	var menus []systemModel.SysBaseMenu
@@ -103,7 +103,7 @@ func (this *SysVersion) ExportVersion(ctx *api.Context, req *systemDto.ExportVer
 	return api.ResultSuccess()
 }
 
-func (this *SysVersion) DownloadVersionJson(ctx *api.Context, req *systemDto.GetSysVersionReq) (*api.Result[any], error) {
+func (this *SysVersion) DownloadVersionJson(ctx *api.Context, req *systemDto.GetSysVersionReq) (*api.Result[Success], error) {
 	svc := systemService.NewSysVersion(ctx)
 	version, err := svc.GetSysVersion(ctx.GinCtx.Request.Context(), strconv.FormatUint(uint64(req.ID), 10))
 	if err != nil {
@@ -139,7 +139,7 @@ func (this *SysVersion) DownloadVersionJson(ctx *api.Context, req *systemDto.Get
 	return nil, nil
 }
 
-func (this *SysVersion) ImportVersion(ctx *api.Context, req *systemDto.ImportVersionRequest) (*api.Result[any], error) {
+func (this *SysVersion) ImportVersion(ctx *api.Context, req *systemDto.ImportVersionRequest) (*api.Result[Success], error) {
 	svc := systemService.NewSysVersion(ctx)
 
 	if len(req.ExportMenu) > 0 {

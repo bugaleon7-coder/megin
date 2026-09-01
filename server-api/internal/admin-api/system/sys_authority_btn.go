@@ -21,7 +21,7 @@ func (this *SysAuthorityBtn) GetAuthorityBtn(ctx *api.Context, req *GetAuthority
 
 // @Summary 设置按钮权限
 // @Description 为角色设置菜单的按钮权限
-func (this *SysAuthorityBtn) SetAuthorityBtn(ctx *api.Context, req *systemDto.SysAuthorityBtnReq) (*api.Result[any], error) {
+func (this *SysAuthorityBtn) SetAuthorityBtn(ctx *api.Context, req *systemDto.SysAuthorityBtnReq) (*api.Result[Success], error) {
 	err := systemService.NewSysAuthorityBtn(ctx).SetAuthorityBtn(req)
 	if err != nil {
 		return nil, err

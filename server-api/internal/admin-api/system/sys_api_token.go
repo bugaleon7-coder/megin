@@ -32,7 +32,7 @@ func (this *SysApiToken) GetApiTokenList(ctx *api.Context, req *systemDto.GetApi
 
 // @Summary 作废API Token
 // @Description 根据ID作废API Token
-func (this *SysApiToken) DeleteApiToken(ctx *api.Context, req *systemDto.DeleteApiTokenReq) (*api.Result[any], error) {
+func (this *SysApiToken) DeleteApiToken(ctx *api.Context, req *systemDto.DeleteApiTokenReq) (*api.Result[Success], error) {
 	if err := systemService.NewSysApiToken(ctx).DeleteApiToken(req.ID); err != nil {
 		return nil, err
 	}

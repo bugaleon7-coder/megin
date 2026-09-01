@@ -13,7 +13,7 @@ type SysUser struct{}
 
 // @Summary 创建用户
 // @Description 创建系统用户
-func (this *SysUser) Register(ctx *api.Context, req *systemDto.RegisterReq) (*api.Result[any], error) {
+func (this *SysUser) Register(ctx *api.Context, req *systemDto.RegisterReq) (*api.Result[Success], error) {
 	_, err := systemService.NewSysUser(ctx).Register(uint(ctx.AdminInfo.RoleId), req)
 	if err != nil {
 		return nil, err
@@ -23,7 +23,7 @@ func (this *SysUser) Register(ctx *api.Context, req *systemDto.RegisterReq) (*ap
 
 // @Summary 修改密码
 // @Description 用户修改自己的密码
-func (this *SysUser) ChangePassword(ctx *api.Context, req *systemDto.ChangePasswordReq) (*api.Result[any], error) {
+func (this *SysUser) ChangePassword(ctx *api.Context, req *systemDto.ChangePasswordReq) (*api.Result[Success], error) {
 	userId := ctx.AdminInfo.UserID
 	err := systemService.NewSysUser(ctx).ChangePassword(uint(userId), req)
 	if err != nil {
@@ -44,7 +44,7 @@ func (this *SysUser) GetUserList(ctx *api.Context, req *systemDto.GetUserListReq
 
 // @Summary 设置用户角色
 // @Description 设置用户的当前角色
-func (this *SysUser) SetUserAuthority(ctx *api.Context, req *systemDto.SetUserAuthReq) (*api.Result[any], error) {
+func (this *SysUser) SetUserAuthority(ctx *api.Context, req *systemDto.SetUserAuthReq) (*api.Result[Success], error) {
 	userId := ctx.AdminInfo.UserID
 	err := systemService.NewSysUser(ctx).SetUserAuthority(uint(userId), req.AuthorityId)
 	if err != nil {
@@ -55,7 +55,7 @@ func (this *SysUser) SetUserAuthority(ctx *api.Context, req *systemDto.SetUserAu
 
 // @Summary 设置用户角色列表
 // @Description 设置用户的多个角色
-func (this *SysUser) SetUserAuthorities(ctx *api.Context, req *systemDto.SetUserAuthoritiesReq) (*api.Result[any], error) {
+func (this *SysUser) SetUserAuthorities(ctx *api.Context, req *systemDto.SetUserAuthoritiesReq) (*api.Result[Success], error) {
 	err := systemService.NewSysUser(ctx).SetUserAuthorities(uint(ctx.AdminInfo.RoleId), req.ID, req.AuthorityIds)
 	if err != nil {
 		return nil, err
@@ -65,7 +65,7 @@ func (this *SysUser) SetUserAuthorities(ctx *api.Context, req *systemDto.SetUser
 
 // @Summary 删除用户
 // @Description 根据用户ID删除用户
-func (this *SysUser) DeleteUser(ctx *api.Context, req *systemDto.GetUserInfoReq) (*api.Result[any], error) {
+func (this *SysUser) DeleteUser(ctx *api.Context, req *systemDto.GetUserInfoReq) (*api.Result[Success], error) {
 	err := systemService.NewSysUser(ctx).DeleteUser(req.ID, uint(ctx.AdminInfo.UserID), uint(ctx.AdminInfo.RoleId))
 	if err != nil {
 		return nil, err
@@ -75,7 +75,7 @@ func (this *SysUser) DeleteUser(ctx *api.Context, req *systemDto.GetUserInfoReq)
 
 // @Summary 修改用户信息
 // @Description 管理员修改用户信息
-func (this *SysUser) SetUserInfo(ctx *api.Context, req *systemDto.ChangeUserInfoReq) (*api.Result[any], error) {
+func (this *SysUser) SetUserInfo(ctx *api.Context, req *systemDto.ChangeUserInfoReq) (*api.Result[Success], error) {
 	err := systemService.NewSysUser(ctx).SetUserInfo(req)
 	if err != nil {
 		return nil, err
@@ -85,7 +85,7 @@ func (this *SysUser) SetUserInfo(ctx *api.Context, req *systemDto.ChangeUserInfo
 
 // @Summary 修改自身信息
 // @Description 用户修改自己的信息
-func (this *SysUser) SetSelfInfo(ctx *api.Context, req *systemDto.ChangeUserInfoReq) (*api.Result[any], error) {
+func (this *SysUser) SetSelfInfo(ctx *api.Context, req *systemDto.ChangeUserInfoReq) (*api.Result[Success], error) {
 	userId := uint(ctx.AdminInfo.UserID)
 	req.ID = userId
 	err := systemService.NewSysUser(ctx).SetSelfInfo(userId, req)
@@ -97,7 +97,7 @@ func (this *SysUser) SetSelfInfo(ctx *api.Context, req *systemDto.ChangeUserInfo
 
 // @Summary 设置用户配置
 // @Description 设置用户个人配置(originSetting)
-func (this *SysUser) SetSelfSetting(ctx *api.Context, req *systemDto.SetSelfSettingReq) (*api.Result[any], error) {
+func (this *SysUser) SetSelfSetting(ctx *api.Context, req *systemDto.SetSelfSettingReq) (*api.Result[Success], error) {
 	userId := uint(ctx.AdminInfo.UserID)
 	err := systemService.NewSysUser(ctx).SetSelfSetting(userId, map[string]any(*req))
 	if err != nil {
@@ -132,7 +132,7 @@ func (this *SysUser) FindUserById(ctx *api.Context, req *systemDto.GetUserInfoRe
 
 // @Summary 重置密码
 // @Description 管理员重置用户密码
-func (this *SysUser) ResetPassword(ctx *api.Context, req *systemDto.ResetPasswordReq) (*api.Result[any], error) {
+func (this *SysUser) ResetPassword(ctx *api.Context, req *systemDto.ResetPasswordReq) (*api.Result[Success], error) {
 	err := systemService.NewSysUser(ctx).ResetPassword(uint(ctx.AdminInfo.RoleId), req.ID, req.Password)
 	if err != nil {
 		return nil, err
@@ -196,7 +196,7 @@ func (this *SysUser) InitTOTP(ctx *api.Context, req *dtoBaseReq) (*api.Result[sy
 
 // @Summary 启用Google TOTP
 // @Description 校验动态码并启用当前管理员的Google TOTP
-func (this *SysUser) EnableTOTP(ctx *api.Context, req *systemDto.TotpCodeReq) (*api.Result[any], error) {
+func (this *SysUser) EnableTOTP(ctx *api.Context, req *systemDto.TotpCodeReq) (*api.Result[Success], error) {
 	err := systemService.NewSysUser(ctx).EnableTOTP(uint(ctx.AdminInfo.UserID), req)
 	if err != nil {
 		return nil, err
@@ -206,7 +206,7 @@ func (this *SysUser) EnableTOTP(ctx *api.Context, req *systemDto.TotpCodeReq) (*
 
 // @Summary 关闭Google TOTP
 // @Description 校验动态码并关闭当前管理员的Google TOTP
-func (this *SysUser) DisableTOTP(ctx *api.Context, req *systemDto.TotpCodeReq) (*api.Result[any], error) {
+func (this *SysUser) DisableTOTP(ctx *api.Context, req *systemDto.TotpCodeReq) (*api.Result[Success], error) {
 	err := systemService.NewSysUser(ctx).DisableTOTP(uint(ctx.AdminInfo.UserID), req)
 	if err != nil {
 		return nil, err

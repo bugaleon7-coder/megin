@@ -1,1 +1,0 @@
-import{x as i}from"./087AC4D233B64EB0index.CwA6QqwT.js";const t="/admin/assets/087AC4D233B64EB0login_right_banner.C7PSiP8i.jpg",o=t=>i({url:"/init/initdb",method:"post",data:t,donNotShowLoading:!0}),n=()=>i({url:"/init/checkdb",method:"post"});export{n as c,o as i,t as l};

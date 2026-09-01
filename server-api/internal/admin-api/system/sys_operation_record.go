@@ -21,7 +21,7 @@ func (this *SysOperationRecord) GetSysOperationRecordInfoList(ctx *api.Context, 
 
 // @Summary 删除操作记录
 // @Description 根据ID删除操作记录
-func (this *SysOperationRecord) DeleteSysOperationRecord(ctx *api.Context, req *systemDto.DeleteOperationRecordReq) (*api.Result[any], error) {
+func (this *SysOperationRecord) DeleteSysOperationRecord(ctx *api.Context, req *systemDto.DeleteOperationRecordReq) (*api.Result[Success], error) {
 	err := systemService.NewSysOperationRecord(ctx).DeleteSysOperationRecord(req.ID)
 	if err != nil {
 		return nil, err
@@ -31,7 +31,7 @@ func (this *SysOperationRecord) DeleteSysOperationRecord(ctx *api.Context, req *
 
 // @Summary 批量删除操作记录
 // @Description 批量删除操作记录
-func (this *SysOperationRecord) DeleteSysOperationRecords(ctx *api.Context, req *DeleteIdsReq) (*api.Result[any], error) {
+func (this *SysOperationRecord) DeleteSysOperationRecords(ctx *api.Context, req *DeleteIdsReq) (*api.Result[Success], error) {
 	err := systemService.NewSysOperationRecord(ctx).DeleteSysOperationRecords(req.Ids)
 	if err != nil {
 		return nil, err

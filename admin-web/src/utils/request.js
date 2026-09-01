@@ -285,7 +285,6 @@ service.interceptors.response.use(
 
 if (typeof window !== 'undefined') {
   window.addEventListener('beforeunload', resetLoading)
-  window.addEventListener('unload', resetLoading)
 }
 
 export { resetLoading }

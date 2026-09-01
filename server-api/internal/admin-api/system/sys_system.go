@@ -22,7 +22,7 @@ func (this *SysSystem) GetSystemConfig(ctx *api.Context, req *commonDto.EmptyReq
 
 // @Summary 设置配置文件内容
 // @Description 设置系统配置文件内容
-func (this *SysSystem) SetSystemConfig(ctx *api.Context, req *systemDto.SystemConfigReq) (*api.Result[any], error) {
+func (this *SysSystem) SetSystemConfig(ctx *api.Context, req *systemDto.SystemConfigReq) (*api.Result[Success], error) {
 	if err := systemService.NewSysSystem(ctx).SetSystemConfig(req); err != nil {
 		return nil, err
 	}
@@ -41,7 +41,7 @@ func (this *SysSystem) GetServerInfo(ctx *api.Context, req *commonDto.EmptyReq) 
 
 // @Summary 重载系统
 // @Description 重载系统配置
-func (this *SysSystem) ReloadSystem(ctx *api.Context, req *commonDto.EmptyReq) (*api.Result[any], error) {
+func (this *SysSystem) ReloadSystem(ctx *api.Context, req *commonDto.EmptyReq) (*api.Result[Success], error) {
 	if err := systemService.NewSysSystem(ctx).ReloadSystem(); err != nil {
 		return nil, err
 	}

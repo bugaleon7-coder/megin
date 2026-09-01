@@ -14,10 +14,15 @@
   import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
   import Application from '@/components/application/index.vue'
   import { useAppStore } from '@/pinia'
+  import { onMounted } from 'vue'
 
   const appStore = useAppStore()
   defineOptions({
     name: 'App'
+  })
+
+  onMounted(() => {
+    window.setTimeout(() => document.getElementById('gva-loading-box')?.remove(), 80)
   })
 </script>
 <style lang="scss">

@@ -48,6 +48,10 @@ router.beforeEach(async (to, from) => {
 
   // 白名单路由处理
   if (WHITE_LIST.includes(to.name)) {
+    if (to.name === 'Login' && to.query.forceLogin === '1') {
+      await userStore.ClearStorage()
+      return true
+    }
     if (token) {
       if(!routerStore.asyncRouterFlag){
         await setupRouter(userStore)

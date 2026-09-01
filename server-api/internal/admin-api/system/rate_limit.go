@@ -38,7 +38,7 @@ func (h *RateLimitRule) Update(ctx *api.Context, req *rateLimitDto.UpdateRateLim
 // @Description 修改状态后立即刷新当前服务实例；禁用接口规则后会回退使用同维度全局规则。
 // @Description 请求字段：id为规则ID，status为0禁用或1启用。
 // @Description 返回字段：无业务数据。
-func (h *RateLimitRule) ChangeStatus(ctx *api.Context, req *rateLimitDto.ChangeRateLimitRuleStatusReq) (*api.Result[any], error) {
+func (h *RateLimitRule) ChangeStatus(ctx *api.Context, req *rateLimitDto.ChangeRateLimitRuleStatusReq) (*api.Result[Success], error) {
 	if err := rateLimitBiz.NewRateLimitRule(ctx).ChangeStatus(req, uint(ctx.AdminInfo.UserID)); err != nil {
 		return nil, err
 	}
@@ -49,7 +49,7 @@ func (h *RateLimitRule) ChangeStatus(ctx *api.Context, req *rateLimitDto.ChangeR
 // @Description 按规则ID硬删除，并立即刷新当前服务实例的运行时快照。
 // @Description 请求字段：id为限流规则ID。
 // @Description 返回字段：无业务数据。
-func (h *RateLimitRule) Delete(ctx *api.Context, req *rateLimitDto.RateLimitRuleIDReq) (*api.Result[any], error) {
+func (h *RateLimitRule) Delete(ctx *api.Context, req *rateLimitDto.RateLimitRuleIDReq) (*api.Result[Success], error) {
 	if err := rateLimitBiz.NewRateLimitRule(ctx).Delete(req.ID); err != nil {
 		return nil, err
 	}

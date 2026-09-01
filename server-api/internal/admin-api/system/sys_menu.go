@@ -32,7 +32,7 @@ func (this *SysMenu) GetBaseMenuTree(ctx *api.Context, req *dtoBaseReq) (*api.Re
 
 // @Summary 添加菜单
 // @Description 添加基础菜单
-func (this *SysMenu) AddBaseMenu(ctx *api.Context, req *systemDto.AddBaseMenuReq) (*api.Result[any], error) {
+func (this *SysMenu) AddBaseMenu(ctx *api.Context, req *systemDto.AddBaseMenuReq) (*api.Result[Success], error) {
 	err := systemService.NewSysMenu(ctx).AddBaseMenu(req)
 	if err != nil {
 		return nil, err
@@ -42,7 +42,7 @@ func (this *SysMenu) AddBaseMenu(ctx *api.Context, req *systemDto.AddBaseMenuReq
 
 // @Summary 删除菜单
 // @Description 删除基础菜单
-func (this *SysMenu) DeleteBaseMenu(ctx *api.Context, req *systemDto.DeleteMenuReq) (*api.Result[any], error) {
+func (this *SysMenu) DeleteBaseMenu(ctx *api.Context, req *systemDto.DeleteMenuReq) (*api.Result[Success], error) {
 	err := systemService.NewSysMenu(ctx).DeleteBaseMenu(req.ID)
 	if err != nil {
 		return nil, err
@@ -52,7 +52,7 @@ func (this *SysMenu) DeleteBaseMenu(ctx *api.Context, req *systemDto.DeleteMenuR
 
 // @Summary 更新菜单
 // @Description 更新基础菜单信息
-func (this *SysMenu) UpdateBaseMenu(ctx *api.Context, req *systemDto.UpdateBaseMenuReq) (*api.Result[any], error) {
+func (this *SysMenu) UpdateBaseMenu(ctx *api.Context, req *systemDto.UpdateBaseMenuReq) (*api.Result[Success], error) {
 	err := systemService.NewSysMenu(ctx).UpdateBaseMenu(req)
 	if err != nil {
 		return nil, err
@@ -82,7 +82,7 @@ func (this *SysMenu) GetMenuAuthority(ctx *api.Context, req *systemDto.GetMenuAu
 
 // @Summary 添加菜单权限
 // @Description 为角色添加菜单权限
-func (this *SysMenu) AddMenuAuthority(ctx *api.Context, req *systemDto.AddMenuAuthorityReq) (*api.Result[any], error) {
+func (this *SysMenu) AddMenuAuthority(ctx *api.Context, req *systemDto.AddMenuAuthorityReq) (*api.Result[Success], error) {
 	err := systemService.NewSysMenu(ctx).AddMenuAuthority(uint(ctx.AdminInfo.RoleId), req.AuthorityId, extractMenuIds(req.Menus))
 	if err != nil {
 		return nil, err
@@ -132,7 +132,7 @@ func (this *SysMenu) GetMenuRoles(ctx *api.Context, req *systemDto.GetMenuRolesR
 // SetMenuRoles 设置菜单角色列表
 // @Summary 全量覆盖某菜单关联的角色列表
 // @Description 设置某菜单关联的角色ID列表
-func (this *SysMenu) SetMenuRoles(ctx *api.Context, req *systemDto.SetMenuRolesReq) (*api.Result[any], error) {
+func (this *SysMenu) SetMenuRoles(ctx *api.Context, req *systemDto.SetMenuRolesReq) (*api.Result[Success], error) {
 	err := systemService.NewSysMenu(ctx).SetMenuAuthorities(req.MenuId, req.AuthorityIds)
 	if err != nil {
 		return nil, err

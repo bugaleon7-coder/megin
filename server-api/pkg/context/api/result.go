@@ -2,6 +2,7 @@ package api
 
 import (
 	"fmt"
+	dto "megin/pkg/context/api/dto"
 	err "megin/pkg/errs"
 	"strings"
 )
@@ -37,8 +38,8 @@ func AttachTraceID(result any, traceID string) {
 	}
 }
 
-func ResultSuccess() (*Result[any], error) {
-	return &Result[any]{
+func ResultSuccess() (*Result[dto.Success], error) {
+	return &Result[dto.Success]{
 		Code:    STATUS_SUCCESS,
 		Message: "成功",
 		Success: true,

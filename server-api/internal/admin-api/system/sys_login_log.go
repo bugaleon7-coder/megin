@@ -21,7 +21,7 @@ func (this *SysLoginLog) GetSysLoginLogInfoList(ctx *api.Context, req *systemDto
 
 // @Summary 删除登录日志
 // @Description 根据ID删除登录日志
-func (this *SysLoginLog) DeleteSysLoginLog(ctx *api.Context, req *systemDto.DeleteLoginLogReq) (*api.Result[any], error) {
+func (this *SysLoginLog) DeleteSysLoginLog(ctx *api.Context, req *systemDto.DeleteLoginLogReq) (*api.Result[Success], error) {
 	err := systemService.NewSysLoginLog(ctx).DeleteSysLoginLog(req.ID)
 	if err != nil {
 		return nil, err
@@ -31,7 +31,7 @@ func (this *SysLoginLog) DeleteSysLoginLog(ctx *api.Context, req *systemDto.Dele
 
 // @Summary 批量删除登录日志
 // @Description 批量删除登录日志
-func (this *SysLoginLog) DeleteSysLoginLogs(ctx *api.Context, req *DeleteIdsReq) (*api.Result[any], error) {
+func (this *SysLoginLog) DeleteSysLoginLogs(ctx *api.Context, req *DeleteIdsReq) (*api.Result[Success], error) {
 	err := systemService.NewSysLoginLog(ctx).DeleteSysLoginLogs(req.Ids)
 	if err != nil {
 		return nil, err

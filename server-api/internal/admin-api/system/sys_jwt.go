@@ -12,7 +12,7 @@ type SysJwt struct{}
 
 // @Summary 将JWT加入黑名单
 // @Description 将JWT Token加入黑名单
-func (this *SysJwt) JsonInBlacklist(ctx *api.Context, req *systemDto.JsonInBlacklistReq) (*api.Result[any], error) {
+func (this *SysJwt) JsonInBlacklist(ctx *api.Context, req *systemDto.JsonInBlacklistReq) (*api.Result[Success], error) {
 	token := blacklistToken(ctx, req)
 	if token == "" {
 		return nil, systemService.NewSysJwt(ctx).ErrorMessage("token不能为空")

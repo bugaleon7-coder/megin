@@ -37,8 +37,15 @@ export const useUserStore = defineStore('user', () => {
   }
 
   const setToken = (val) => {
-    token.value = val
-    xToken.value = val
+    const nextToken = val || ''
+    token.value = nextToken
+    if (nextToken) {
+      localStorage.setItem('token', nextToken)
+      xToken.set('x-token', nextToken, { path: '/' })
+      return
+    }
+    localStorage.removeItem('token')
+    xToken.remove('x-token', { path: '/' })
   }
 
   const NeedInit = async () => {
@@ -134,9 +141,7 @@ export const useUserStore = defineStore('user', () => {
   }
   /* 清理数据 */
   const ClearStorage = async () => {
-    token.value = ''
-    // 使用remove方法正确删除cookie
-    xToken.remove()
+    setToken('')
     sessionStorage.clear()
     // 清理所有相关的localStorage项
     localStorage.removeItem('originSetting')

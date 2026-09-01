@@ -11,8 +11,8 @@ const props = defineProps({
   }
 })
 
-const darkLogoPath = "/logo.png";  // 系统没有暗黑模式logo，如果需要暗黑模式logo请自行修改文件路径。
-const lightLogoPath = "/logo.png";
+const darkLogoPath = '/admin/logo.png' // 系统没有暗黑模式logo，如果需要暗黑模式logo请自行修改文件路径。
+const lightLogoPath = '/admin/logo.png'
 
 const appStore = useAppStore();
 const { isDark } = storeToRefs(appStore);
@@ -70,7 +70,7 @@ function getSize() {
       ...getSize()
     }" :class="{
       'filter invert-[90%] hue-rotate-180 brightness-110':
-        isDark && logoSrc === '/logo.png',
+        isDark && logoSrc === '/admin/logo.png',
     }" />
   <div v-else-if="showTextPlaceholder"
     class="rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center text-gray-700 dark:text-gray-200 font-bold text-xs"

@@ -12,7 +12,7 @@ type SysError struct{}
 
 // @Summary 创建错误日志
 // @Description 创建错误日志（无需认证）
-func (this *SysError) CreateSysError(ctx *api.Context, req *model.SysError) (*api.Result[any], error) {
+func (this *SysError) CreateSysError(ctx *api.Context, req *model.SysError) (*api.Result[Success], error) {
 	err := systemService.NewSysError(ctx).CreateSysError(req)
 	if err != nil {
 		return nil, err
@@ -22,7 +22,7 @@ func (this *SysError) CreateSysError(ctx *api.Context, req *model.SysError) (*ap
 
 // @Summary 删除错误日志
 // @Description 根据ID删除错误日志
-func (this *SysError) DeleteSysError(ctx *api.Context, req *systemDto.DeleteSysErrorReq) (*api.Result[any], error) {
+func (this *SysError) DeleteSysError(ctx *api.Context, req *systemDto.DeleteSysErrorReq) (*api.Result[Success], error) {
 	err := systemService.NewSysError(ctx).DeleteSysError(req.ID)
 	if err != nil {
 		return nil, err
@@ -32,7 +32,7 @@ func (this *SysError) DeleteSysError(ctx *api.Context, req *systemDto.DeleteSysE
 
 // @Summary 批量删除错误日志
 // @Description 批量删除错误日志
-func (this *SysError) DeleteSysErrorByIds(ctx *api.Context, req *systemDto.DeleteSysErrorsReq) (*api.Result[any], error) {
+func (this *SysError) DeleteSysErrorByIds(ctx *api.Context, req *systemDto.DeleteSysErrorsReq) (*api.Result[Success], error) {
 	err := systemService.NewSysError(ctx).DeleteSysErrorByIds(req.IDs)
 	if err != nil {
 		return nil, err
@@ -42,7 +42,7 @@ func (this *SysError) DeleteSysErrorByIds(ctx *api.Context, req *systemDto.Delet
 
 // @Summary 更新错误日志
 // @Description 更新错误日志信息
-func (this *SysError) UpdateSysError(ctx *api.Context, req *systemDto.UpdateSysErrorReq) (*api.Result[any], error) {
+func (this *SysError) UpdateSysError(ctx *api.Context, req *systemDto.UpdateSysErrorReq) (*api.Result[Success], error) {
 	err := systemService.NewSysError(ctx).UpdateSysError(req)
 	if err != nil {
 		return nil, err
@@ -72,7 +72,7 @@ func (this *SysError) GetSysErrorList(ctx *api.Context, req *systemDto.SysErrorS
 
 // @Summary 触发错误日志处理
 // @Description 标记错误日志为处理中，1分钟后自动更新为处理完成
-func (this *SysError) GetSysErrorSolution(ctx *api.Context, req *systemDto.GetSysErrorSolutionReq) (*api.Result[any], error) {
+func (this *SysError) GetSysErrorSolution(ctx *api.Context, req *systemDto.GetSysErrorSolutionReq) (*api.Result[Success], error) {
 	id := uint(0)
 	if req.ID != "" {
 		var val uint64

@@ -11,7 +11,7 @@ type SysDictionaryDetail struct{}
 
 // @Summary 创建字典详情
 // @Description 创建字典详情项
-func (this *SysDictionaryDetail) CreateSysDictionaryDetail(ctx *api.Context, req *systemDto.CreateDictionaryDetailReq) (*api.Result[any], error) {
+func (this *SysDictionaryDetail) CreateSysDictionaryDetail(ctx *api.Context, req *systemDto.CreateDictionaryDetailReq) (*api.Result[Success], error) {
 	err := systemService.NewSysDictionaryDetail(ctx).CreateSysDictionaryDetail(req)
 	if err != nil {
 		return nil, err
@@ -21,7 +21,7 @@ func (this *SysDictionaryDetail) CreateSysDictionaryDetail(ctx *api.Context, req
 
 // @Summary 删除字典详情
 // @Description 删除字典详情项
-func (this *SysDictionaryDetail) DeleteSysDictionaryDetail(ctx *api.Context, req *systemDto.DeleteDictionaryDetailReq) (*api.Result[any], error) {
+func (this *SysDictionaryDetail) DeleteSysDictionaryDetail(ctx *api.Context, req *systemDto.DeleteDictionaryDetailReq) (*api.Result[Success], error) {
 	err := systemService.NewSysDictionaryDetail(ctx).DeleteSysDictionaryDetail(req.ID)
 	if err != nil {
 		return nil, err
@@ -31,7 +31,7 @@ func (this *SysDictionaryDetail) DeleteSysDictionaryDetail(ctx *api.Context, req
 
 // @Summary 更新字典详情
 // @Description 更新字典详情项信息
-func (this *SysDictionaryDetail) UpdateSysDictionaryDetail(ctx *api.Context, req *systemDto.UpdateDictionaryDetailReq) (*api.Result[any], error) {
+func (this *SysDictionaryDetail) UpdateSysDictionaryDetail(ctx *api.Context, req *systemDto.UpdateDictionaryDetailReq) (*api.Result[Success], error) {
 	err := systemService.NewSysDictionaryDetail(ctx).UpdateSysDictionaryDetail(req)
 	if err != nil {
 		return nil, err

@@ -11,7 +11,7 @@ type SysParams struct{}
 
 // @Summary 创建参数
 // @Description 创建系统参数
-func (this *SysParams) CreateSysParams(ctx *api.Context, req *systemDto.CreateParamsReq) (*api.Result[any], error) {
+func (this *SysParams) CreateSysParams(ctx *api.Context, req *systemDto.CreateParamsReq) (*api.Result[Success], error) {
 	err := systemService.NewSysParams(ctx).CreateSysParams(req)
 	if err != nil {
 		return nil, err
@@ -21,7 +21,7 @@ func (this *SysParams) CreateSysParams(ctx *api.Context, req *systemDto.CreatePa
 
 // @Summary 删除参数
 // @Description 删除系统参数
-func (this *SysParams) DeleteSysParams(ctx *api.Context, req *systemDto.DeleteParamsReq) (*api.Result[any], error) {
+func (this *SysParams) DeleteSysParams(ctx *api.Context, req *systemDto.DeleteParamsReq) (*api.Result[Success], error) {
 	err := systemService.NewSysParams(ctx).DeleteSysParams(req.ID)
 	if err != nil {
 		return nil, err
@@ -31,7 +31,7 @@ func (this *SysParams) DeleteSysParams(ctx *api.Context, req *systemDto.DeletePa
 
 // @Summary 更新参数
 // @Description 更新系统参数信息
-func (this *SysParams) UpdateSysParams(ctx *api.Context, req *systemDto.UpdateParamsReq) (*api.Result[any], error) {
+func (this *SysParams) UpdateSysParams(ctx *api.Context, req *systemDto.UpdateParamsReq) (*api.Result[Success], error) {
 	err := systemService.NewSysParams(ctx).UpdateSysParams(req)
 	if err != nil {
 		return nil, err
@@ -71,7 +71,7 @@ func (this *SysParams) GetSysParamsInfoList(ctx *api.Context, req *systemDto.Par
 
 // @Summary 批量删除参数
 // @Description 批量删除系统参数
-func (this *SysParams) DeleteSysParamsByIds(ctx *api.Context, req *DeleteIdsReq) (*api.Result[any], error) {
+func (this *SysParams) DeleteSysParamsByIds(ctx *api.Context, req *DeleteIdsReq) (*api.Result[Success], error) {
 	err := systemService.NewSysParams(ctx).DeleteSysParamsByIds(req.Ids)
 	if err != nil {
 		return nil, err

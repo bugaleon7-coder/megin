@@ -11,7 +11,7 @@ import (
 	"testing"
 
 	"megin/internal"
-	"megin/internal/module/article/dto"
+	"megin/internal/dto"
 	"megin/pkg/bootstrap"
 	"megin/test"
 )

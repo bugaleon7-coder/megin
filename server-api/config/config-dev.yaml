@@ -91,6 +91,7 @@ api-doc:
   gen-scan-dir:
     - pkg/context/api
     - internal/api
+    - internal/dto
     - internal/system
     - internal/admin-api
     - internal/module

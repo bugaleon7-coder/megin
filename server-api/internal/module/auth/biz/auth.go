@@ -2,7 +2,7 @@ package biz
 
 import (
 	"megin/internal/base"
-	authDto "megin/internal/module/auth/dto"
+	authDto "megin/internal/dto"
 	authService "megin/internal/module/auth/service"
 	userService "megin/internal/module/user/service"
 	"megin/pkg/context/api"

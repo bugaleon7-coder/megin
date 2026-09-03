@@ -1,7 +1,7 @@
 package handler
 
 import (
-	customerDto "megin/internal/module/customer/dto"
+	customerDto "megin/internal/dto"
 	customerService "megin/internal/module/customer/service"
 	"megin/pkg/context/api"
 )
@@ -40,7 +40,7 @@ func (h *Customer) Detail(ctx *api.Context, req *customerDto.GetCustomerReq) (*a
 	return api.ResultData(customerDto.CustomerResponse{Customer: *customer})
 }
 
-func (h *Customer) List(ctx *api.Context, req *customerDto.GetCustomerListReq) (*api.Result[customerDto.PageResult[customerDto.Customer]], error) {
+func (h *Customer) List(ctx *api.Context, req *customerDto.GetCustomerListReq) (*api.Result[customerDto.CustomerPageResult[customerDto.Customer]], error) {
 	result, err := customerService.NewCustomer(ctx).GetList(uint(ctx.AdminInfo.RoleId), req)
 	if err != nil {
 		return nil, err

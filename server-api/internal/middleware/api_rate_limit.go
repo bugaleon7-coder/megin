@@ -3,7 +3,7 @@ package middleware
 import (
 	"math"
 	"megin/internal/config"
-	commonDto "megin/internal/module/common/dto"
+	commonDto "megin/internal/dto"
 	rateLimitRuntime "megin/internal/system/runtime"
 	"megin/pkg/context/api"
 	"megin/pkg/errs"

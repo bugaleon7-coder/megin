@@ -3,7 +3,7 @@ package service
 import (
 	"megin/internal/base"
 	customerConvert "megin/internal/module/customer/convert"
-	customerDto "megin/internal/module/customer/dto"
+	customerDto "megin/internal/dto"
 	customerModel "megin/internal/module/customer/model"
 	customerRepo "megin/internal/module/customer/repository"
 	systemService "megin/internal/system/service"
@@ -76,7 +76,7 @@ func (s *Customer) GetByID(id uint) (*customerDto.Customer, error) {
 	return &dto, nil
 }
 
-func (s *Customer) GetList(authorityID uint, req *customerDto.GetCustomerListReq) (*customerDto.PageResult[customerDto.Customer], error) {
+func (s *Customer) GetList(authorityID uint, req *customerDto.GetCustomerListReq) (*customerDto.CustomerPageResult[customerDto.Customer], error) {
 	auth, err := systemService.NewSysAuthority(s.Ctx).GetAuthorityInfo(authorityID)
 	if err != nil {
 		return nil, err
@@ -92,7 +92,7 @@ func (s *Customer) GetList(authorityID uint, req *customerDto.GetCustomerListReq
 		return nil, s.Error(err, "获取客户列表失败")
 	}
 
-	result := &customerDto.PageResult[customerDto.Customer]{
+	result := &customerDto.CustomerPageResult[customerDto.Customer]{
 		PageNo:    req.PageNo,
 		PageSize:  req.PageSize,
 		TotalSize: total,

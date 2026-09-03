@@ -1,7 +1,7 @@
 package system
 
 import (
-	commonDto "megin/internal/module/common/dto"
+	commonDto "megin/internal/dto"
 	systemDto "megin/internal/system/dto"
 	systemService "megin/internal/system/service"
 	"megin/pkg/context/api"

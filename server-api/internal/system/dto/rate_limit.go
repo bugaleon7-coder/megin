@@ -1,7 +1,7 @@
 package dto
 
 import (
-	commonDto "megin/internal/module/common/dto"
+	commonDto "megin/internal/dto"
 	"time"
 )
 

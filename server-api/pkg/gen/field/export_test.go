@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"gorm.io/gen/field"
+	"megin/pkg/gen/field"
 )
 
 var _ field.ScanValuer = new(password)

@@ -1,7 +1,7 @@
 package api
 
 import (
-	commonDto "megin/internal/module/common/dto"
+	commonDto "megin/internal/dto"
 	contextApi "megin/pkg/context/api"
 )
 

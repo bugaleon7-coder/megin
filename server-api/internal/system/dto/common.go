@@ -1,6 +1,6 @@
 package dto
 
-import commonDto "megin/internal/module/common/dto"
+import commonDto "megin/internal/dto"
 
 // JWT相关请求
 type JsonInBlacklistReq struct {

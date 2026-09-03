@@ -4,7 +4,7 @@ import (
 	"encoding/json/v2"
 	"fmt"
 	"megin/internal/config"
-	commonDto "megin/internal/module/common/dto"
+	commonDto "megin/internal/dto"
 	rateLimitModel "megin/internal/system/model"
 	rateLimitRuntime "megin/internal/system/runtime"
 	"megin/pkg/context/api"

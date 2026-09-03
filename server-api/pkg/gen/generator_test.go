@@ -11,7 +11,7 @@ import (
 	"gorm.io/gorm/schema"
 	"gorm.io/gorm/utils/tests"
 
-	"gorm.io/gen/field"
+	"megin/pkg/gen/field"
 )
 
 func TestConfig(t *testing.T) {
@@ -21,7 +21,7 @@ func TestConfig(t *testing.T) {
 		OutPath: "path",
 		OutFile: "",
 
-		ModelPkgPath: "models",
+		modelPkgPath: "models",
 
 		queryPkgName: "query",
 	}

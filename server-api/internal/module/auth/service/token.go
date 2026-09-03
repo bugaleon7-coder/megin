@@ -3,7 +3,7 @@ package service
 import (
 	"megin/internal/base"
 	"megin/internal/config"
-	commonDto "megin/internal/module/common/dto"
+	commonDto "megin/internal/dto"
 	userModel "megin/internal/module/user/model"
 	"megin/pkg/context/api"
 	"time"

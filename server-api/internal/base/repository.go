@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	commonDto "megin/internal/module/common/dto"
+	commonDto "megin/internal/dto"
 	"time"
 
 	"megin/internal/config"

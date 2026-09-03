@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"time"
 
-	commonDto "megin/internal/module/common/dto"
+	commonDto "megin/internal/dto"
 	systemDto "megin/internal/system/dto"
 	systemModel "megin/internal/system/model"
 	systemService "megin/internal/system/service"

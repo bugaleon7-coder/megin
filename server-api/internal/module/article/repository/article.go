@@ -4,7 +4,7 @@ package repo
 
 import (
 	"megin/internal/base"
-	"megin/internal/module/article/dto"
+	"megin/internal/dto"
 	"megin/internal/module/article/model"
 	"megin/pkg/context/api"
 	"time"

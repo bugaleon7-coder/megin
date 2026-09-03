@@ -4,8 +4,7 @@ import (
 	"encoding/json/v2"
 	"megin/internal"
 	"megin/internal/config"
-	authDto "megin/internal/module/auth/dto"
-	commonDto "megin/internal/module/common/dto"
+	"megin/internal/dto"
 	"megin/pkg/bootstrap"
 	"megin/test"
 	"sync"
@@ -29,7 +28,7 @@ func initLoginTestServer() {
 func TestApiUserRegister(t *testing.T) {
 	initLoginTestServer()
 
-	resp := test.PostWithoutToken("/api/user/register", authDto.RegisterReq{
+	resp := test.PostWithoutToken("/api/user/register", dto.RegisterReq{
 		LoginName: username,
 		Password:  password,
 	})
@@ -40,7 +39,7 @@ func TestApiUserRegister(t *testing.T) {
 func TestApiUserLogin(t *testing.T) {
 	initLoginTestServer()
 
-	resp := test.PostWithoutToken("/api/user/login", authDto.LoginReq{
+	resp := test.PostWithoutToken("/api/user/login", dto.LoginReq{
 		LoginName: username,
 		Password:  password,
 	})
@@ -52,13 +51,13 @@ func TestApiUserInfo(t *testing.T) {
 	initLoginTestServer()
 
 	token := GetToken()
-	resp := test.GetWithToken("/api/user/info", token, commonDto.EmptyReq{})
+	resp := test.GetWithToken("/api/user/info", token, dto.EmptyReq{})
 	test.Print(resp.Body.String())
 }
 
 // GetToken 登录并返回 token。
 func GetToken() string {
-	resp := test.PostWithoutToken("/api/user/login", authDto.LoginReq{
+	resp := test.PostWithoutToken("/api/user/login", dto.LoginReq{
 		LoginName: username,
 		Password:  password,
 	})

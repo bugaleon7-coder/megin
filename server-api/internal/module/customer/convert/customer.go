@@ -1,7 +1,7 @@
 package convert
 
 import (
-	customerDto "megin/internal/module/customer/dto"
+	customerDto "megin/internal/dto"
 	customerModel "megin/internal/module/customer/model"
 )
 

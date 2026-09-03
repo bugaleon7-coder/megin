@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"megin/internal/config"
-	commonDto "megin/internal/module/common/dto"
+	commonDto "megin/internal/dto"
 	"strings"
 
 	"github.com/gin-gonic/gin"

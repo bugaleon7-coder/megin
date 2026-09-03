@@ -1,7 +1,7 @@
 package convert
 
 import (
-	articleDto "megin/internal/module/article/dto"
+	articleDto "megin/internal/dto"
 	articleModel "megin/internal/module/article/model"
 )
 

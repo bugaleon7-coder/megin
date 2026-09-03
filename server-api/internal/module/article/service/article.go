@@ -5,7 +5,7 @@ package service
 import (
 	"megin/internal/base"
 	"megin/internal/module/article/convert"
-	"megin/internal/module/article/dto"
+	"megin/internal/dto"
 	"megin/internal/module/article/model"
 	repo "megin/internal/module/article/repository"
 	"megin/pkg/context/api"

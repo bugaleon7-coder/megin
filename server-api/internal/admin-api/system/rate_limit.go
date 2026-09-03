@@ -1,7 +1,7 @@
 package system
 
 import (
-	commonDto "megin/internal/module/common/dto"
+	commonDto "megin/internal/dto"
 	rateLimitBiz "megin/internal/system/biz"
 	rateLimitDto "megin/internal/system/dto"
 	"megin/pkg/context/api"

@@ -3,7 +3,7 @@ package api
 
 import (
 	"megin/internal/base"
-	"megin/internal/module/article/dto"
+	"megin/internal/dto"
 	"megin/internal/module/article/service"
 	"megin/pkg/context/api"
 )

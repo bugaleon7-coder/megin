@@ -4,7 +4,7 @@ import (
 	"errors"
 	"megin/internal/base"
 	"megin/internal/config"
-	commonDto "megin/internal/module/common/dto"
+	commonDto "megin/internal/dto"
 	systemDto "megin/internal/system/dto"
 	"megin/internal/system/model"
 	repo "megin/internal/system/repository"

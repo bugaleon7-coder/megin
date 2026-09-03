@@ -3,7 +3,7 @@ package middleware
 import (
 	"errors"
 	bizcache "megin/internal/cache"
-	commonDto "megin/internal/module/common/dto"
+	commonDto "megin/internal/dto"
 	"megin/pkg/context/api"
 	"megin/pkg/errs"
 	"net/http"

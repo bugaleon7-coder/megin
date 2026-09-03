@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	sysApi "megin/internal/admin-api/system"
-	commonDto "megin/internal/module/common/dto"
+	commonDto "megin/internal/dto"
 	sysRouter "megin/internal/system/router"
 	"megin/pkg/context/router"
 

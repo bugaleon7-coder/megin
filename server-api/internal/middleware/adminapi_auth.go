@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"errors"
-	commonDto "megin/internal/module/common/dto"
+	commonDto "megin/internal/dto"
 	systemService "megin/internal/system/service"
 	"megin/pkg/context/api"
 	"megin/pkg/errs"

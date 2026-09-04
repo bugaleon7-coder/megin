@@ -62,15 +62,39 @@ go run cmd/api/main.go -env=dev          # api
 go run cmd/admin-api/main.go -env=dev    # admin_api
 ```
 
-### 数据库初始化
+### 数据库操作
+
+所有 SQL 文件位于 `server-api/sql/`，文件名使用 `YYYYMMDD_序号_说明.sql`。当前目录只保留一个全量初始快照：`20260904_0001_init.sql`；它只包含建库、建表和初始数据，不包含删库或删表语句。
+
+首次安装时，服务会在 `migrate.enable: true`（默认）且目标数据库不存在时自动执行 `sql/20260904_0001_init.sql`；数据库已存在时会跳过初始化，绝不会清空已有数据。服务随后照常执行 GORM 的结构迁移，并刷新该初始化快照。
+
+配置项示例：
+
+```yaml
+migrate:
+  enable: true
+  sql-file: sql/20260904_0001_init.sql
+```
+
+将 `enable` 设为 `false` 可关闭首次初始化和启动后的 SQL 快照更新。
+
+#### 手动初始化
 
 ```shell
-# 创建数据库
-mysql -uroot -p123456 -e "create database if not exists go_app_starter default charset utf8mb4 collate utf8mb4_unicode_ci;"
-
-# 导入初始化 SQL
-mysql -uroot -p123456 go_app_starter < go_app_starter.sql
+# 仅用于数据库不存在的首次安装。
+mysql -uroot -p123456 < sql/20260904_0001_init.sql
 ```
+
+#### 手动更新初始化快照
+
+`migrate` 命令会将当前配置连接的 MySQL 库完整导出、原子替换 `sql/20260904_0001_init.sql`。仅应对作为项目初始数据来源的开发库执行；命令依赖本机的 `mysqldump`。
+
+```shell
+sh server.sh migrate --env=dev
+# 等效命令：go run ./cmd/migrate --env=dev
+```
+
+服务首次自动导入初始化快照以及手动导入均依赖本机 `mysql` 客户端。
 
 ### 正式环境布署
 

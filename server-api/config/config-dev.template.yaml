@@ -46,6 +46,13 @@ database:
   max_idle_conns: 10
   # 数据库连接池允许建立的最大连接数。
   max_open_conns: 50
+
+# 数据库迁移配置。首次安装时执行全量初始化 SQL，后续启动仅执行常规迁移。
+migrate:
+  # 未配置时默认开启；仅在数据库不存在时导入不会删库的初始化 SQL。
+  enable: true
+  # 相对于 server-api 工作目录的初始化 SQL 路径。
+  sql-file: sql/20260904_0001_init.sql
 # JWT 登录令牌配置。
 jwt:
   # JWT 签名密钥；生产环境必须替换为足够长的随机值并妥善保管。

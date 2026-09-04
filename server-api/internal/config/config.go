@@ -41,6 +41,25 @@ type Database struct {
 	SkipDefaultTransaction bool   `yaml:"skip_default_transaction"`
 }
 
+// MigrateConfig 控制服务启动时的数据库迁移和初始化 SQL 导出。
+type MigrateConfig struct {
+	Enable  *bool  `yaml:"enable"`
+	SQLFile string `yaml:"sql-file"`
+}
+
+// Enabled 未配置时默认开启，以保证旧配置升级后仍会自动迁移。
+func (c MigrateConfig) Enabled() bool {
+	return c.Enable == nil || *c.Enable
+}
+
+// OutputFile 返回初始化 SQL 的输出路径。
+func (c MigrateConfig) OutputFile() string {
+	if c.SQLFile == "" {
+		return "sql/20260904_0001_init.sql"
+	}
+	return c.SQLFile
+}
+
 type Redis struct {
 	Addr     string `yaml:"addr"` //127.0.0.1:6379
 	Password string `yaml:"password"`
@@ -128,6 +147,7 @@ type ServiceConfig struct {
 	Version      string             `yaml:"version"`
 	FileUrl      string             `yaml:"file_url"`
 	Database     Database           `yaml:"database"`
+	Migrate      MigrateConfig      `yaml:"migrate"`
 	Jwt          JwtConfig          `yaml:"jwt"`
 	Redis        Redis              `yaml:"redis"`
 	Admin        AdminConfig        `yaml:"admin"`

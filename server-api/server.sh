@@ -82,6 +82,11 @@ function version() {
   "$BASE_DIR/$SERVER" version
 }
 
+function migrate() {
+  ensure_env_arg
+  go run ./cmd/migrate "$ENV_ARG"
+}
+
 case "$ACTION" in
   build)
     build
@@ -107,8 +112,11 @@ case "$ACTION" in
   version)
     version
     ;;
+  migrate)
+    migrate
+    ;;
   *)
-    echo "usage: $0 {build|run|start|stop|restart|status|version} --env=dev|test|prod"
+    echo "usage: $0 {build|run|start|stop|restart|status|version|migrate} --env=dev|test|prod"
     exit 1
     ;;
 esac

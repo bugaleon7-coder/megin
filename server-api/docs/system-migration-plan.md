@@ -66,7 +66,7 @@ internal/system/router/      路由注册
 
 已知文档问题：
 
-- `docs/sql/schema.sql` 当前为空文件。
+- `server-api/sql/20260904_0001_init.sql` 是当前唯一的全量初始化快照。
 - `architecture-dev-guide.md` 仍包含 `/api` 公开分组，与最新要求不一致。
 - 旧迁移方案使用 Unix 时间和 `ModelTime`，与当前 `SystemModel` 不一致。
 - 旧迁移方案没有完整覆盖 API Token 和版本管理。
@@ -304,7 +304,7 @@ API Token：
 
 1. 更新 OpenAPI/Swagger。
 2. 更新 `architecture-dev-guide.md`。
-3. 从实际数据库生成 `docs/sql/schema.sql`。
+3. 从实际数据库生成带日期前缀的初始化快照，例如 `server-api/sql/20260904_0001_init.sql`。
 4. 删除过时的接口和迁移说明。
 
 ## 七、推荐实施顺序

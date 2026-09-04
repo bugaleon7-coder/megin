@@ -357,7 +357,7 @@ Map 的创建、读取和清理需要并发保护。单个 `rate.Limiter` 本身
 
 如果限流功能开启，但首次规则加载失败，建议终止服务启动，避免服务在没有预期保护的情况下运行。
 
-服务启动时会自动迁移规则表；如果表中没有任何记录，则把 YAML 中的 IP 和 UID 参数写成两条全局初始规则，并写入 `GET /api/health` 的接口级 IP 限流示例，因此首次部署不依赖人工补数据。`docs/sql/api_rate_limit.sql` 仍用于显式数据库初始化，以及注册后台接口元数据、后台菜单和默认超级管理员权限。
+服务启动时会自动迁移规则表；如果表中没有任何记录，则把 YAML 中的 IP 和 UID 参数写成两条全局初始规则，并写入 `GET /api/health` 的接口级 IP 限流示例，因此首次部署不依赖人工补数据。相关初始化数据已收敛至 `server-api/sql/20260904_0001_init.sql`。
 
 ### 9.2 后台修改后即时刷新
 
@@ -413,7 +413,7 @@ Map 的创建、读取和清理需要并发保护。单个 `rate.Limiter` 本身
 | DELETE | `/admin-api/system/rate-limit/delete` | 删除规则 |
 | POST | `/admin-api/system/rate-limit/refresh` | 手动刷新当前实例规则 |
 
-这些接口挂载后台 Token 和 Casbin，并遵守后台成功响应 `code=200`、消息字段使用 `message` 的约定。接口元数据和超级管理员初始权限见 `docs/sql/api_rate_limit.sql`。
+这些接口挂载后台 Token 和 Casbin，并遵守后台成功响应 `code=200`、消息字段使用 `message` 的约定。接口元数据和超级管理员初始权限见 `server-api/sql/20260904_0001_init.sql`。
 
 推荐目录：
 

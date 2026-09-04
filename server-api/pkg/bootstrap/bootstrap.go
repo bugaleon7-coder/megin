@@ -5,6 +5,7 @@ import (
 	"megin/internal/cache"
 	"megin/internal/config"
 	"megin/internal/middleware"
+	"megin/internal/migration"
 	xrouter "megin/internal/router"
 	"megin/internal/schedule"
 	"megin/pkg/context/router"
@@ -30,14 +31,32 @@ func ServerInitWithMode(configPath string, mode string, onStart func() error) {
 	logger.InitLog(logger.LogConfig{LogInConsole: true})
 	//3,加载参数验证扩展
 	validate.RegisterExtension()
-	//4,数据库初始化
+	//4,仅首次安装时恢复全量初始化数据；已有数据库绝不执行初始化 SQL。
+	if conf.Migrate.Enabled() {
+		exists, err := migration.DatabaseExists(conf.Database.Dsn)
+		if err != nil {
+			log.Fatalln("检查初始化数据库失败:", err)
+		}
+		if !exists {
+			if err := migration.ApplyInit(conf.Database.Dsn, conf.Migrate.OutputFile()); err != nil {
+				log.Fatalln("执行初始化 SQL 失败:", err)
+			}
+		}
+	}
+	//5,数据库初始化
 	config.InitDatabase(conf)
-	//5,初始化默认缓存管理器，供限流、分布式锁等依赖 Redis 的能力统一复用。
+	//6,初始化默认缓存管理器，供限流、分布式锁等依赖 Redis 的能力统一复用。
 	cache.InitManager(config.GetRedis().GetDB())
-	//6,业务初始化
+	//7,业务初始化
 	err := onStart()
 	if err != nil {
 		log.Fatalln(err)
+	}
+	//8,业务迁移完成后更新初始化 SQL。
+	if conf.Migrate.Enabled() {
+		if err := migration.Dump(conf.Database.Dsn, conf.Migrate.OutputFile()); err != nil {
+			log.Fatalln("导出初始化 SQL 失败:", err)
+		}
 	}
 }
 

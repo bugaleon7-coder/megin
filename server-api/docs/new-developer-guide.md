@@ -51,7 +51,7 @@ router -> handler -> biz -> service -> repository -> model
 
 ```shell
 mysql -uroot -p123456 -e "create database if not exists go_app_starter default charset utf8mb4 collate utf8mb4_unicode_ci;"
-mysql -uroot -p123456 go_app_starter < go_app_starter.sql
+mysql -uroot -p123456 < sql/20260904_0001_init.sql
 ```
 
 ### 2.3 配置文件位置

@@ -12,16 +12,19 @@ go-app-starter/
 
 ## 快速安装
 
-默认情况下，只需导入初始化 SQL 并启动服务即可。以下命令假设本机已安装 MySQL 和与 `server-api/go.mod` 一致的 Go 版本；默认开发配置使用 MySQL `root:123456`。
+默认情况下，首次启动服务会在数据库不存在时自动导入初始化 SQL。以下命令假设本机已安装 MySQL 和与 `server-api/go.mod` 一致的 Go 版本；默认开发配置使用 MySQL `root:123456`。
 
 ```shell
-# 1. 创建数据库并导入初始化数据
-mysql -uroot -p123456 -e "create database if not exists go_app_starter default charset utf8mb4 collate utf8mb4_unicode_ci;"
-mysql -uroot -p123456 go_app_starter < server-api/go_app_starter.sql
-
-# 2. 启动服务（默认 mixed 模式，端口 8800）
+# 1. 启动服务（默认 mixed 模式，端口 8800）。
+# 数据库不存在时，服务会自动导入 server-api/sql/20260904_0001_init.sql；已有数据库不会被清空。
 cd server-api
 go run main.go -env=dev
+```
+
+需要手动建立一个全新库时，可执行：
+
+```shell
+mysql -uroot -p123456 < server-api/sql/20260904_0001_init.sql
 ```
 
 启动后可访问：

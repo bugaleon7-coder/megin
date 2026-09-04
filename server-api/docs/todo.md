@@ -13,7 +13,7 @@
 - 不复用 `sys_users.origin_setting` 存放 TOTP 密钥。
 - 为 `sys_users` 增加独立字段：`totp_secret`、`totp_enabled`、`totp_bound_at`。
 - `totp_secret` 需可逆加密存储，禁止明文落库。
-- 手动执行初始化 SQL：[docs/sql/admin_totp_manual.sql](/Users/lchb/go_admin/gin-vue-admin/shop-api/docs/sql/admin_totp_manual.sql:1)。
+- 手动执行初始化 SQL：[sql/20260904_0001_init.sql](../sql/20260904_0001_init.sql)。
 
 ### 3. 补充后台接口
 

@@ -61,6 +61,7 @@
   "/src/view/superAdmin/operation/sysOperationRecord.vue": "SysOperationRecord",
   "/src/view/superAdmin/params/sysParams.vue": "SysParams",
   "/src/view/superAdmin/rateLimit/index.vue": "ApiRateLimit",
+  "/src/view/superAdmin/scheduledTask/index.vue": "ScheduledTask",
   "/src/view/superAdmin/user/user.vue": "User",
   "/src/view/system/state.vue": "State",
   "/src/view/systemTools/aiWrokflow/index.vue": "AIWorkflow",

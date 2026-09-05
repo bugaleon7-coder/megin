@@ -116,7 +116,7 @@ type APIRateLimitConfig struct {
 	UID                    UIDRateLimitConfig `yaml:"uid"`                      // 首次建表时写入 MySQL 的全局 UID 初始规则配置
 	IdleExpirationSeconds  int64              `yaml:"idle-expiration-seconds"`  // IP 或 UID 令牌桶持续空闲多久后允许从内存删除
 	CleanupIntervalSeconds int64              `yaml:"cleanup-interval-seconds"` // 两次惰性清理之间的最短间隔，清理由后续请求触发
-	RefreshIntervalSeconds int64              `yaml:"refresh-interval-seconds"` // 从 MySQL 定时刷新规则的周期秒数
+	RefreshIntervalSeconds int64              `yaml:"refresh-interval-seconds"` // 已废弃：限流规则刷新周期改由后台“定时任务管理”配置
 }
 
 type ApiDoc struct {

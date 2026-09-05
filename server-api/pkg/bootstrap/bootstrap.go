@@ -87,7 +87,9 @@ func ServerRun() {
 		MountAPI:      conf.GetRunMode() == config.RunModeMixed || conf.GetRunMode() == config.RunModeAPI,
 		MountAdminAPI: conf.GetRunMode() == config.RunModeMixed || conf.GetRunMode() == config.RunModeAdminAPI,
 	})
-	schedule.Start()
+	if err := schedule.StartTaskManager(); err != nil {
+		logger.Fatal("启动定时任务管理器失败", zap.Error(err))
+	}
 	startPprofServer(conf)
 
 	if route.Run(conf.ActiveListenAddr()) != nil {

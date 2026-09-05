@@ -66,7 +66,7 @@ go run cmd/admin-api/main.go -env=dev    # admin_api
 
 所有 SQL 文件位于 `server-api/sql/`，文件名使用 `YYYYMMDD_序号_说明.sql`。当前目录只保留一个全量初始快照：`20260904_0001_init.sql`；它只包含建库、建表和初始数据，不包含删库或删表语句。
 
-首次安装时，服务会在 `migrate.enable: true`（默认）且目标数据库不存在时自动执行 `sql/20260904_0001_init.sql`；数据库已存在时会跳过初始化，绝不会清空已有数据。服务随后照常执行 GORM 的结构迁移，并刷新该初始化快照。
+首次安装时，服务会在 `migrate.enable: true`（默认）且目标数据库不存在时自动执行 `sql/20260904_0001_init.sql`；数据库已存在时会跳过初始化，绝不会清空已有数据。随后服务在启动业务前按文件名字典序执行未完成的增量 SQL，并将文件名与 SHA-256 校验和记录到 `schema_migrations`；服务启动不会改写初始化快照。
 
 配置项示例：
 
@@ -74,9 +74,10 @@ go run cmd/admin-api/main.go -env=dev    # admin_api
 migrate:
   enable: true
   sql-file: sql/20260904_0001_init.sql
+  migration-dir: sql
 ```
 
-将 `enable` 设为 `false` 可关闭首次初始化和启动后的 SQL 快照更新。
+将 `enable` 设为 `false` 可关闭首次自动初始化和增量 SQL 执行。
 
 #### 手动初始化
 
@@ -85,13 +86,28 @@ migrate:
 mysql -uroot -p123456 < sql/20260904_0001_init.sql
 ```
 
-#### 手动更新初始化快照
+#### 增量迁移
 
-`migrate` 命令会将当前配置连接的 MySQL 库完整导出、原子替换 `sql/20260904_0001_init.sql`。仅应对作为项目初始数据来源的开发库执行；命令依赖本机的 `mysqldump`。
+新增字段、索引或数据修复时，在 `sql/` 新建文件，例如：
+
+```text
+20260905_0001_add_article_summary.sql
+```
+
+该文件只执行一次；成功后写入 `schema_migrations`。已记录文件不可修改，如需调整必须新建下一个日期化文件。
+
+服务启动会自动执行待执行脚本；也可手动执行：
 
 ```shell
 sh server.sh migrate --env=dev
-# 等效命令：go run ./cmd/migrate --env=dev
+```
+
+#### 手动更新初始化快照
+
+需要从当前开发库重建全量初始化快照时，显式使用 `--snapshot`；命令依赖本机的 `mysqldump`。
+
+```shell
+go run ./cmd/migrate --env=dev --snapshot
 ```
 
 服务首次自动导入初始化快照以及手动导入均依赖本机 `mysql` 客户端。

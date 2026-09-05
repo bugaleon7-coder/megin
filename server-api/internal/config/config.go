@@ -43,8 +43,9 @@ type Database struct {
 
 // MigrateConfig 控制服务启动时的数据库迁移和初始化 SQL 导出。
 type MigrateConfig struct {
-	Enable  *bool  `yaml:"enable"`
-	SQLFile string `yaml:"sql-file"`
+	Enable       *bool  `yaml:"enable"`
+	SQLFile      string `yaml:"sql-file"`
+	MigrationDir string `yaml:"migration-dir"`
 }
 
 // Enabled 未配置时默认开启，以保证旧配置升级后仍会自动迁移。
@@ -58,6 +59,14 @@ func (c MigrateConfig) OutputFile() string {
 		return "sql/20260904_0001_init.sql"
 	}
 	return c.SQLFile
+}
+
+// Directory 返回增量迁移 SQL 所在目录。
+func (c MigrateConfig) Directory() string {
+	if c.MigrationDir == "" {
+		return "sql"
+	}
+	return c.MigrationDir
 }
 
 type Redis struct {

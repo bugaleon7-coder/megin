@@ -45,18 +45,18 @@ func ServerInitWithMode(configPath string, mode string, onStart func() error) {
 	}
 	//5,数据库初始化
 	config.InitDatabase(conf)
-	//6,初始化默认缓存管理器，供限流、分布式锁等依赖 Redis 的能力统一复用。
+	//6,按日期顺序执行未执行的增量 SQL。
+	if conf.Migrate.Enabled() {
+		if _, err := migration.RunPending(config.GetMysqlDB(), conf.Database.Dsn, conf.Migrate.Directory(), conf.Migrate.OutputFile()); err != nil {
+			log.Fatalln("执行增量 SQL 迁移失败:", err)
+		}
+	}
+	//7,初始化默认缓存管理器，供限流、分布式锁等依赖 Redis 的能力统一复用。
 	cache.InitManager(config.GetRedis().GetDB())
-	//7,业务初始化
+	//8,业务初始化
 	err := onStart()
 	if err != nil {
 		log.Fatalln(err)
-	}
-	//8,业务迁移完成后更新初始化 SQL。
-	if conf.Migrate.Enabled() {
-		if err := migration.Dump(conf.Database.Dsn, conf.Migrate.OutputFile()); err != nil {
-			log.Fatalln("导出初始化 SQL 失败:", err)
-		}
 	}
 }
 

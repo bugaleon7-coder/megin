@@ -3,7 +3,6 @@ package internal
 import (
 	"megin/internal/config"
 	rateLimitRuntime "megin/internal/system/runtime"
-	rateLimitService "megin/internal/system/service"
 	"megin/pkg/logger"
 	"time"
 )
@@ -13,9 +12,6 @@ func OnServerStart() error {
 	logger.Info("OnServerStart Run....")
 	conf := config.GetConfig()
 	db := config.GetMysqlDB()
-	if err := rateLimitService.EnsureSchemaAndSeed(db, conf.APIRateLimit); err != nil {
-		return err
-	}
 	_, err := rateLimitRuntime.InitDefaultManager(
 		db,
 		time.Duration(conf.APIRateLimit.IdleExpirationSeconds)*time.Second,

@@ -7,6 +7,9 @@ import (
 	"strings"
 )
 
+// Success 是无业务数据成功响应的统一类型。
+type Success = dto.Success
+
 type Result[T any] struct {
 	Code    int      `json:"code"`            //返回编码200为成功,其它编号为异常
 	Message string   `json:"message"`         //返回错误信息
@@ -38,8 +41,8 @@ func AttachTraceID(result any, traceID string) {
 	}
 }
 
-func ResultSuccess() (*Result[dto.Success], error) {
-	return &Result[dto.Success]{
+func ResultSuccess() (*Result[Success], error) {
+	return &Result[Success]{
 		Code:    STATUS_SUCCESS,
 		Message: "成功",
 		Success: true,

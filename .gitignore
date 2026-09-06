@@ -27,6 +27,7 @@ server-api/app
 # 运行时数据
 **/logs/
 **/uploads/
+**/runtime/pprof/
 *.log
 
 # 本地配置和环境文件

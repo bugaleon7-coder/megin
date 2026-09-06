@@ -84,10 +84,12 @@ admin:
 
 # Go pprof 运行时性能分析服务。生产环境默认关闭；如需临时排障，只允许监听本机。
 pprof:
-  # 是否启用 pprof；生产环境通常保持关闭。
+  # 服务启动时的 pprof 初始状态；生产环境建议关闭，需要时从管理后台临时开启。
   enable: false
   # pprof 监听端口，实际监听地址固定为 127.0.0.1:port。
   port: 6060
+  # 原始 profile 与火焰图数据目录；生产环境可替换为持久化磁盘挂载点。
+  directory: runtime/pprof
 
 # Swagger/OpenAPI 文档生成配置。
 api-doc:

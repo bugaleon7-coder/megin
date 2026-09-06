@@ -131,8 +131,9 @@ type ApiDoc struct {
 
 // PprofConfig 是运行时性能分析服务配置。
 type PprofConfig struct {
-	Enable bool   `yaml:"enable"`
-	Port   string `yaml:"port"`
+	Enable    bool   `yaml:"enable"`
+	Port      string `yaml:"port"`
+	Directory string `yaml:"directory"`
 }
 
 type ServerNode struct {
@@ -206,6 +207,14 @@ func (config *ServiceConfig) PprofListenAddr() string {
 		port = "6060"
 	}
 	return "127.0.0.1:" + port
+}
+
+// PprofDirectory 返回原始 profile 和火焰图数据的本地存储目录。
+func (config *ServiceConfig) PprofDirectory() string {
+	if config.Pprof.Directory == "" {
+		return "runtime/pprof"
+	}
+	return config.Pprof.Directory
 }
 
 func (config *ServiceConfig) ActiveServiceName() string {

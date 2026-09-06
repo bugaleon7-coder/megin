@@ -13,6 +13,7 @@ require (
 	github.com/goccy/go-yaml v1.19.1
 	github.com/golang-jwt/jwt/v5 v5.3.0
 	github.com/golang-module/carbon/v2 v2.6.9
+	github.com/google/pprof v0.0.0-20221118152302-e6195bd50e26
 	github.com/google/uuid v1.6.0
 	github.com/jellydator/ttlcache/v3 v3.4.1
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible

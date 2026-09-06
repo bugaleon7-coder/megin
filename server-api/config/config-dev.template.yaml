@@ -84,10 +84,12 @@ admin:
 
 # Go pprof 运行时性能分析服务，仅监听本机，禁止配置为公网地址。
 pprof:
-  # 是否启用 pprof；仅在开发或临时排障时开启。
+  # 服务启动时的 pprof 初始状态；启动后可在“运行监控 → Pprof 性能分析”动态启停。
   enable: true
   # pprof 监听端口，实际监听地址固定为 127.0.0.1:port。
   port: 6060
+  # 原始 profile 与火焰图数据目录；记录元数据保存在数据库。
+  directory: runtime/pprof
 
 # Swagger/OpenAPI 文档生成配置。
 api-doc:

@@ -6,13 +6,13 @@ import (
 	"megin/internal/config"
 	"megin/internal/middleware"
 	"megin/internal/migration"
+	"megin/internal/profiler"
 	xrouter "megin/internal/router"
 	"megin/internal/schedule"
+	systemService "megin/internal/system/service"
 	"megin/pkg/context/router"
 	"megin/pkg/logger"
 	"megin/pkg/validate"
-	"net/http"
-	_ "net/http/pprof"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -53,7 +53,11 @@ func ServerInitWithMode(configPath string, mode string, onStart func() error) {
 	}
 	//7,初始化默认缓存管理器，供限流、分布式锁等依赖 Redis 的能力统一复用。
 	cache.InitManager(config.GetRedis().GetDB())
-	//8,业务初始化
+	//8,启动 Pprof 持久化采样队列。
+	if err := systemService.InitPprofJobs(); err != nil {
+		logger.Error("启动 Pprof 采样队列失败", zap.Error(err))
+	}
+	//9,业务初始化
 	err := onStart()
 	if err != nil {
 		log.Fatalln(err)
@@ -90,25 +94,22 @@ func ServerRun() {
 	if err := schedule.StartTaskManager(); err != nil {
 		logger.Fatal("启动定时任务管理器失败", zap.Error(err))
 	}
-	startPprofServer(conf)
+	configurePprof(conf)
 
 	if route.Run(conf.ActiveListenAddr()) != nil {
 		logger.Fatal("Server Run Error")
 	}
 }
 
-// startPprofServer 在独立的本机地址启动运行时性能分析服务。
-func startPprofServer(conf *config.ServiceConfig) {
-	if !conf.Pprof.Enable {
+// configurePprof 初始化可由管理后台动态启停的本机性能分析服务。
+func configurePprof(conf *config.ServiceConfig) {
+	addr := conf.PprofListenAddr()
+	if err := profiler.Configure(addr, conf.Pprof.Enable); err != nil {
+		logger.Error("Pprof Server Start Failed", zap.String("addr", addr), zap.Error(err))
 		return
 	}
-
-	addr := conf.PprofListenAddr()
-	go func() {
+	if conf.Pprof.Enable {
 		logger.Info("Pprof Server Started", zap.String("addr", addr))
 		logger.Info("Pprof 查看地址: http://" + addr + "/debug/pprof/")
-		if err := http.ListenAndServe(addr, nil); err != nil {
-			logger.Error("Pprof Server Stopped", zap.Error(err))
-		}
-	}()
+	}
 }

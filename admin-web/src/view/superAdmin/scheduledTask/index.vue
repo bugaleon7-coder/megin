@@ -18,12 +18,12 @@
       <el-table :data="tableData" row-key="id">
         <el-table-column prop="id" label="ID" width="70" />
         <el-table-column prop="name" label="任务名称" min-width="160" />
-        <el-table-column label="执行器" min-width="180"><template #default="{ row }">{{ jobName(row.job_key) }}</template></el-table-column>
-        <el-table-column prop="cron_expr" label="Cron 表达式" min-width="150"><template #default="{ row }"><code>{{ row.cron_expr }}</code></template></el-table-column>
+        <el-table-column label="执行器" min-width="130" show-overflow-tooltip><template #default="{ row }">{{ jobName(row.job_key) }}</template></el-table-column>
+        <el-table-column prop="cron_expr" label="Cron 表达式" min-width="120"><template #default="{ row }"><code>{{ row.cron_expr }}</code></template></el-table-column>
         <el-table-column label="状态" width="145"><template #default="{ row }"><el-switch :model-value="row.status" :active-value="1" :inactive-value="0" active-text="启用" inactive-text="禁用" @change="(value) => changeStatus(row, value)" /></template></el-table-column>
         <el-table-column prop="remark" label="备注" min-width="160" show-overflow-tooltip />
         <el-table-column label="更新时间" width="175"><template #default="{ row }">{{ formatDate(row.updated_at) }}</template></el-table-column>
-        <el-table-column label="操作" fixed="right" width="230"><template #default="{ row }"><el-button type="primary" link icon="video-play" @click="execute(row)">执行</el-button><el-button type="primary" link icon="document" @click="openLogs(row)">日志</el-button><el-button type="primary" link icon="edit" @click="openEdit(row)">编辑</el-button><el-button type="danger" link icon="delete" @click="remove(row)">删除</el-button></template></el-table-column>
+        <el-table-column label="操作" fixed="right" width="280"><template #default="{ row }"><el-button type="primary" link icon="video-play" @click="execute(row)">执行</el-button><el-button type="primary" link icon="document" @click="openLogs(row)">日志</el-button><el-button type="primary" link icon="edit" @click="openEdit(row)">编辑</el-button><el-button type="danger" link icon="delete" @click="remove(row)">删除</el-button></template></el-table-column>
       </el-table>
       <div class="gva-pagination"><el-pagination :current-page="pageNo" :page-size="pageSize" :total="total" layout="total, prev, pager, next" @current-change="changePage" /></div>
     </div>

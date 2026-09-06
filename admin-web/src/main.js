@@ -17,6 +17,18 @@ import { store } from '@/pinia'
 import App from './App.vue'
 import '@/core/error-handel'
 
+// 发布后旧入口页可能仍引用已替换的带 hash 资源。Vite 在预加载失败时会触发此事件，
+// 自动刷新一次即可取得新入口；用 sessionStorage 防止网络故障时反复刷新。
+window.addEventListener('vite:preloadError', (event) => {
+  event.preventDefault()
+  const reloadKey = 'vite-preload-error-reloaded'
+  if (sessionStorage.getItem(reloadKey)) {
+    return
+  }
+  sessionStorage.setItem(reloadKey, '1')
+  window.location.reload()
+})
+
 const app = createApp(App)
 
 app.config.productionTip = false

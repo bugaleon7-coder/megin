@@ -21,8 +21,12 @@ var dbManager = new(DBManager)
 func InitDatabase(conf *ServiceConfig) {
 	//连接mysql
 	if conf.Database.Driver == "mysql" && len(conf.Database.Dsn) > 0 {
+		gormLogLevel := logger.Silent
+		if conf.Database.ShowSQL {
+			gormLogLevel = logger.Info
+		}
 		db, err := gorm.Open(mysql.Open(conf.Database.Dsn), &gorm.Config{
-			Logger:                 logger.Default.LogMode(logger.Info),
+			Logger:                 logger.Default.LogMode(gormLogLevel),
 			SkipDefaultTransaction: conf.Database.SkipDefaultTransaction,
 		})
 

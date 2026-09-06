@@ -39,6 +39,7 @@ type Database struct {
 	Dsn                    string `yaml:"dsn"`
 	Driver                 string `yaml:"driver"`
 	SkipDefaultTransaction bool   `yaml:"skip_default_transaction"`
+	ShowSQL                bool   `yaml:"show_sql"`
 }
 
 // MigrateConfig 控制服务启动时的数据库迁移和初始化 SQL 导出。

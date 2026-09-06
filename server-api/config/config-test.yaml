@@ -42,6 +42,8 @@ database:
   dsn: root:123456@tcp(127.0.0.1)/go_app_starter_test?charset=utf8&parseTime=True&loc=Local
   # 是否跳过 GORM 单条写操作的默认事务；开启前需确认多步骤写入已显式使用事务。
   skip_default_transaction: true
+  # 是否输出 GORM 执行的 SQL；测试排障时可开启，默认关闭以避免日志噪声。
+  show_sql: false
   # 空闲连接池保留的最大连接数。
   max_idle_conns: 10
   # 数据库连接池允许建立的最大连接数。

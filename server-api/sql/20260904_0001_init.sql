@@ -69,23 +69,23 @@ UNLOCK TABLES;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `articles` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '自增主键',
-  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT '内容',
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci COMMENT '内容',
   `text_type` tinyint NOT NULL DEFAULT '0',
-  `orig_content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT '原始内容',
-  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '标题',
-  `org_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '原始标题',
-  `summary` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '摘要',
+  `orig_content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci COMMENT '原始内容',
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '标题',
+  `org_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '原始标题',
+  `summary` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '摘要',
   `category1` smallint unsigned NOT NULL DEFAULT '0' COMMENT '类别1',
   `category2` smallint unsigned NOT NULL DEFAULT '0' COMMENT '类型2',
   `created_at` int unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
   `updated_at` int unsigned NOT NULL DEFAULT '0' COMMENT '修改时间',
   `source` smallint unsigned NOT NULL DEFAULT '0' COMMENT '来源',
-  `orig_link` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '原始链接',
+  `orig_link` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '' COMMENT '原始链接',
   PRIMARY KEY (`id`),
   KEY `idx_category1` (`category1`),
   KEY `idx_category2` (`category2`),
   KEY `idx_source` (`source`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='文章表';
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='文章表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

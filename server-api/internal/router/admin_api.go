@@ -59,6 +59,7 @@ func InitSystemAdminRouter(adminApiGroup *router.RouteGroup) *router.RouteGroup 
 	sysRouter.SysErrorRouter(adminApiGroup)
 	sysRouter.RateLimitRouter(adminApiGroup)
 	sysRouter.ScheduledTaskRouter(adminApiGroup)
+	sysRouter.DatabaseQueryRouter(adminApiGroup)
 	return adminApiGroup
 }
 

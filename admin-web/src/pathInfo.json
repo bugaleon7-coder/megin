@@ -52,6 +52,7 @@
   "/src/view/superAdmin/authority/components/apis.vue": "Apis",
   "/src/view/superAdmin/authority/components/datas.vue": "Datas",
   "/src/view/superAdmin/authority/components/menus.vue": "Menus",
+  "/src/view/superAdmin/databaseQuery/index.vue": "DatabaseQuery",
   "/src/view/superAdmin/dictionary/sysDictionary.vue": "SysDictionary",
   "/src/view/superAdmin/dictionary/sysDictionaryDetail.vue": "SysDictionaryDetail",
   "/src/view/superAdmin/index.vue": "SuperAdmin",
